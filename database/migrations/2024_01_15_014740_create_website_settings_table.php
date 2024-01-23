@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('website_settings', function (Blueprint $table) {
             $table->id();
-            $table->decimal('shop_longitude', 9, 6);
-            $table->decimal('shop_latitude', 8, 6);
-            $table->string('email');
-            $table->string('phone_number');
-            $table->string('address');
+            $table->decimal('shop_longitude', 9, 6)->nullable();
+            $table->decimal('shop_latitude', 8, 6)->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

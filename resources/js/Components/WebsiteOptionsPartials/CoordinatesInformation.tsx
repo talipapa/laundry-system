@@ -1,5 +1,4 @@
 import { LaundryLocationSchema } from '@/Schema/AdminSetupSchema'
-import { Toaster } from '@/shadcn/ui/toaster'
 import { useToast } from '@/shadcn/ui/use-toast'
 import { router } from '@inertiajs/react'
 import React, { useState } from 'react'
@@ -109,7 +108,6 @@ const CoordinatesInformation = ({webSettings}: any) => {
                 
                 <Button type="submit" className="py-2 rounded-md" disabled={!isValid || isDisabledButton}>Save</Button>
             </div>
-            <Toaster/>
         </form>
     )
 }

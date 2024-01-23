@@ -36,6 +36,7 @@ import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shadcn/ui/select'
 import { router } from '@inertiajs/react'
 import { useToast } from '@/shadcn/ui/use-toast'
+import { Toaster } from '@/shadcn/ui/toaster'
 
 interface DataTableProps<TData, TValue> {
 columns: ColumnDef<TData, TValue>[]
@@ -78,7 +79,7 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
       },
       meta: {
         updateRole: (rowIndex:any, userId: any, columnId: any, value: any) => {
-          console.log(rowIndex, userId, columnId, value)
+          // console.log(rowIndex, userId, columnId, value)
           const payload = {
             id: userId,
             role: value
@@ -86,6 +87,26 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
           router.put(route('admin.customer.role'), payload, {
             preserveState: true,
             onSuccess: () => {
+              toast({title: 'Successfully saved', variant: 'success'})
+              
+            },
+            onError: (e) => {
+              console.log(e)
+              toast({title: 'Successfully saved', description: 'Something went wrong', variant: 'destructive'})
+              router.reload()
+            }
+
+          })
+        },
+        updateStatus: (rowIndex:any, transactionId: any, columnId: any, value: any) => {
+          console.log(rowIndex, transactionId, columnId, value)
+          const payload = {
+            id: transactionId,
+            status: value
+          }
+          router.put(route('admin.transaction.status'), payload, {
+            onSuccess: () => {
+              router.reload()
               toast({title: 'Successfully saved', variant: 'success'})
               
             },
@@ -110,7 +131,7 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
               value={filtering}
               onChange={(event) => setFiltering(event.target.value)
               }
-              className="max-w-sm shadow-sm dark:border-[#E9590C] bg-[#ffffff] dark:bg-[#2e2c2c] "
+              className="max-w-sm shadow-sm bg-[#ffffff] dark:bg-[#0C0A09] "
             />
             <div className='flex flex-row items-center space-x-3 '>
               <Select
@@ -119,7 +140,7 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
                   table.setPageSize(Number(value))
                 }}
               >
-                <SelectTrigger className="h-9 rounded-lg w-[100px] dark:border-[#E9590C] bg-[#ffffff] dark:bg-[#2e2c2c] ">
+                <SelectTrigger className="h-9 rounded-lg w-[100px] bg-[#ffffff] dark:bg-[#0C0A09] ">
                   <SelectValue placeholder={table.getState().pagination.pageSize} />
                 </SelectTrigger>
                 <SelectContent side="top">
@@ -230,6 +251,7 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
               </Button>
             </div>
           </div>
+          <Toaster />
         </div>
       )
 }

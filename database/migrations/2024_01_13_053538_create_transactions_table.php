@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->foreignId("user_id")->nullable(true)->constrained('users', 'id')->onDelete('set null');
             $table->string("status")->default("waiting");
             $table->boolean("is_reviewed")->default(false);

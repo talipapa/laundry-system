@@ -1,12 +1,12 @@
 import React from 'react'
 import AdminDashboardTemplate from './AdminDashboardTemplate'
-import { Checkbox } from '@/shadcn/ui/checkbox'
 import { format, formatDistance } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
 import { Order } from '@/types'
 import DataTable from '@/Components/DataTable'
 import { Button } from '@/shadcn/ui/button'
 import { CaretSortIcon } from '@radix-ui/react-icons'
+import AdminReservationStatus from '@/Components/AdminPartials/AdminReservationStatus'
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -35,6 +35,21 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
+    accessorKey: "status",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )},
+    cell: AdminReservationStatus
+  },
+  {
     accessorKey: "id",
     header: ({column}) => {
       return (
@@ -44,7 +59,7 @@ export const columns: ColumnDef<Order>[] = [
           className='px-4'
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          ID
+          Reservation ID
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
         </div>
@@ -66,21 +81,7 @@ export const columns: ColumnDef<Order>[] = [
       )},
     size: 1
   },
-  {
-    accessorKey: "status",
-    header: ({column}) => {
-      return (
-        <Button
-          variant="ghost"
-          className='px-4'
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Status
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      )},
-    size: 200
-  },
+
   {
     accessorKey: "created_at",
     header: ({column}) => {
@@ -114,9 +115,10 @@ const customColumnVisiblity = {
 
 const ReservationQueue = ({auth, currentOrders}: any) => {
   const [isChecked, setIsChecked] = React.useState(false)
+  const [data, setData] = React.useState(currentOrders)
   return (
     <AdminDashboardTemplate headerText="Reservation" auth={auth}>
-        <DataTable columns={columns} data={currentOrders} customColumnVisiblity={customColumnVisiblity}/>
+        <DataTable columns={columns} data={data} customColumnVisiblity={customColumnVisiblity}/>
     </AdminDashboardTemplate>
   )
 }

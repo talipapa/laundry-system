@@ -10,7 +10,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shadcn/ui/alert-dialog"
-import { Toaster } from '@/shadcn/ui/toaster'
 
 import {
   Dialog,
@@ -221,7 +220,6 @@ const AdminCustomerActions = ({row}: any) => {
             <DropdownMenuItem className='text-red-400' onClick={() => setOpen(true)}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Toaster/>
       </>
     )
 }

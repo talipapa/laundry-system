@@ -79,7 +79,6 @@ const BusinessInformation = ({webSettings}: any) => {
         />
         <Button type="submit" className="py-2 rounded-md" disabled={!isValid || isDisabledButton}>Save</Button>
         </div>
-        <Toaster/>
     </form>
   )
 }

@@ -18,4 +18,6 @@ class TransactionController extends Controller
 
         return Inertia::render('Admin/Transactions', $payload);
     }
+
+
 }

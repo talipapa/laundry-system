@@ -31,6 +31,15 @@ class WebsiteOptions extends Controller
 
         $webSettings = WebsiteSetting::first();
 
+        if ($webSettings == null){
+            $webSettings = WebsiteSetting::create([
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address' => $request->address
+            ]);
+            $webSettings->save();
+            return redirect()->back()->with('success', 'Contact info updated successfully');
+        }
         $webSettings->update([
             'phone' => $request->phone,
             'email' => $request->email,
@@ -50,7 +59,14 @@ class WebsiteOptions extends Controller
         ]);
 
         $webSettings = WebsiteSetting::first();
-
+        if ($webSettings == null){
+            $webSettings = WebsiteSetting::create([
+                'shop_longitude' => $request->longitude,
+                'shop_latitude' => $request->latitude
+            ]);
+            $webSettings->save();
+            return redirect()->back()->with('success', 'Contact info updated successfully');
+        }
         $webSettings->update([
             'shop_longitude' => $request->longitude,
             'shop_latitude' => $request->latitude

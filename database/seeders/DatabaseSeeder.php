@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,7 +14,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(200)->create();
+        User::factory()->create([
+            'first_name' => 'John',
+            'last_name' => 'Davila',
+            'email' => 'davilajohn810@gmail.com',
+            'password' => bcrypt('password'),
+            'role' => 'owner'
+        ]);
+
+        User::factory(200)->create();
 
         // Make a factory of 200 transactions from transaction model
         \App\Models\Transaction::factory(200)->create();

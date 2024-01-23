@@ -48,7 +48,12 @@ Route::middleware(['auth', 'verified', 'admin-clearance', 'detect-owner'])->grou
     })->name('admin.dashboard');
     Route::get('/admin/reservation', [ReservationQueueController::class, 'index'])->name('admin.reservation-queue');
     Route::get('/admin/customer', [CustomerController::class, 'index'])->name('admin.customer');
+    
     Route::get('/admin/transaction', [TransactionController::class, 'index'])->name('admin.transaction');
+    Route::put('/admin/transaction', [ReservationQueueController::class, 'changeStatus'])->name('admin.transaction.status');
+
+
+
     Route::get('/admin/profile', [ProfileController::class, 'index'])->name('admin.account-settings');
     Route::get('/admin/web-settings', [WebsiteOptions::class, 'index'])->name('admin.web-settings');
 

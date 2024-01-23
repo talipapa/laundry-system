@@ -1,39 +1,10 @@
-import React from 'react'
 import DataTable from '@/Components/DataTable'
 import { User } from '@/types'
 import { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@/shadcn/ui/checkbox'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/shadcn/ui/dropdown-menu'
 import { Button } from '@/shadcn/ui/button'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { CaretSortIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
-
-import { useToast } from "@/shadcn/ui/use-toast"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/shadcn/ui/alert-dialog"
-import { Toaster } from '@/shadcn/ui/toaster'
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shadcn/ui/dialog"
-import { Label } from '@/shadcn/ui/label'
-import { Input } from '@/shadcn/ui/input'
-import { router } from '@inertiajs/react'
 import SelectionRole from './Componenets/SelectionRole'
 import AdminCustomerActions from '../AdminPartials/AdminCustomerActions'
 
@@ -43,7 +14,7 @@ export const columns: ColumnDef<User>[] = [
       size: 50,
       header: ({ table }) => (
         // Checkbox should be wrapped inside a flex to avoid padding or margin bug.
-        <div className='flex'>
+        <div className='flex px-4'>
           <Checkbox
             checked={
               table.getIsAllPageRowsSelected() ||
@@ -65,31 +36,91 @@ export const columns: ColumnDef<User>[] = [
     },
     {
       accessorKey: "id",
-      header: "ID",
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            ID
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )},
       size: 1,
     },
     {
       accessorKey: "email",
       size: -100,
-      header: "Email",
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Email
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )},
     },
     {
         accessorKey: "role",
-        header: "Role",
+        header: ({column}) => {
+          return (
+            <Button
+              variant="ghost"
+              className='px-4'
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Role
+              <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+          )},
         size: 1,
         cell: SelectionRole
     },
     {
       accessorKey: "first_name",
-      header: "Fname",
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Fname
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )},
     },
     {
       accessorKey: "last_name",
-      header: "Lname",
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Lname
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )},
     },
     {
       accessorKey: "created_at",
-      header: "Created At",
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Created At
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )},
       cell: ({ row }) => {
         return <div className='flex flex-col items-start'>
           <div>
@@ -103,7 +134,17 @@ export const columns: ColumnDef<User>[] = [
     },
     {
       accessorKey: "updated_at",
-      header: "Updated At",
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Updated At
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )},
       cell: ({ row }) => {
         return <div className='flex flex-col items-start'>
           <div>
@@ -117,7 +158,14 @@ export const columns: ColumnDef<User>[] = [
     },
     {
       id: "actions",
-      header: "Actions",
+      header: ({column}) => {
+        return (
+          <div
+            className='px-4'
+          >
+            Actions
+          </div>
+        )},
       enableHiding: false,
       cell: AdminCustomerActions
     },
