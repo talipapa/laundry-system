@@ -1,0 +1,1 @@
+export const applicationName = import.meta.env.VITE_APP_NAME;
