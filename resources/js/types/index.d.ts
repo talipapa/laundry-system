@@ -12,6 +12,8 @@ export interface Order {
     id: number;
     user_id: number;
     status: string;
+    service_type: string;
+    total_price: number;
     created_at: string;
     updated_at: string;
 }

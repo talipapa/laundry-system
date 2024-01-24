@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Selections\ServiceAddons;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
+use App\Selections\ServiceType;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -18,9 +20,25 @@ class TransactionFactory extends Factory
 
     public function definition(): array
     {
+        $totalPrice = 0;
+        $addons = [
+            ServiceAddons::SHOE_CLEANING->name => ServiceAddons::SHOE_CLEANING->value,
+            ServiceAddons::IRONING->name => ServiceAddons::IRONING->value,
+        ];
+
+        foreach ($addons as $key => $value) {
+            $totalPrice += $value;
+        }
+
+        $serviceType = strtoupper(Arr::random([ServiceType::SELF_SERVICE->name, ServiceType::FULL_SERVICE->name]));
+        $totalPrice += constant("App\Selections\ServiceType::{$serviceType}")->value;
+
         return [
             'user_id' => fake()->numberBetween(50, 200),
             'status' => Arr::random(['waiting', 'washing', 'pickup', 'complete']),
+            'addons' => $addons,
+            'service_type' => $serviceType,
+            'total_price' => $totalPrice,
             'is_reviewed' => Arr::random([true, false]),
         ];
     }

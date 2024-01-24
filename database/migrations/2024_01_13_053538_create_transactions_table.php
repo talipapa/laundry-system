@@ -16,9 +16,14 @@ return new class extends Migration
             $table->foreignId("user_id")->nullable(true)->constrained('users', 'id')->onDelete('set null');
             $table->string("status")->default("waiting");
             $table->boolean("is_reviewed")->default(false);
+            $table->string("service_type");
+            $table->integer("total_price");
+            $table->string("addons")->nullable();
             $table->timestamps();
         });
     }
+
+
 
     /**
      * Reverse the migrations.

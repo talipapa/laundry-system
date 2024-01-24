@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import React from "react"
 
 const AdminReservationStatus = ({row, column, getValue, table}: any) => {
-    const [foreGroundColor, setForegroundColor] = React.useState(availableStatus[getValue() as keyof typeof availableStatus].foreground)
+    const [foreGroundColor, setForegroundColor] = React.useState(availableStatus[getValue() as keyof typeof availableStatus].foreground || '')
     const onChange = (e: any) => {
         setForegroundColor(availableStatus[e as keyof typeof availableStatus].foreground)
         table.options.meta?.updateStatus(row.index, row.original.id, column.id, e)

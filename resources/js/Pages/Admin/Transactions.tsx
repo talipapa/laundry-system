@@ -9,6 +9,7 @@ import { Button } from '@/shadcn/ui/button'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { availableStatus } from '@/Helpers/OrderStatus'
 import { Select } from '@/shadcn/ui/select'
+import AdminReservationAddons from '@/Components/AdminPartials/AdminReservationAddons'
 
 type Props = {}
 export const columns: ColumnDef<Order>[] = [
@@ -38,6 +39,28 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
+    accessorKey: "total_price",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Total Price
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )},
+      cell: ({ row }) => {
+        return (
+          <div className='flex flex-col items-start text-[0.8rem]'>
+              {`₱ ${row.original.total_price}`}
+          </div>
+        )
+      }
+
+  },
+  {
     accessorKey: "status",
     header: ({column}) => {
       return (
@@ -58,6 +81,46 @@ export const columns: ColumnDef<Order>[] = [
       </div>
     </div>
     }
+  },
+  {
+    accessorKey: "service_type",
+    header: ({column}) => {
+      return (
+        <div className='relative'>
+        <Button
+          variant="ghost"
+          className='px-4 '
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Service Type
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+        </div>
+      )}, 
+    cell: ({ row, getValue }) => {
+      return (
+        <div className='flex flex-col items-start text-[0.8rem]'>
+            {row.original.service_type}
+        </div>
+      )
+    }
+  },
+  {
+    accessorKey: "addons",
+    header: ({column}) => {
+      return (
+        <div className='relative'>
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Add ons
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+        </div>
+      )}, 
+    cell: AdminReservationAddons
   },
   {
     accessorKey: "id",

@@ -7,6 +7,7 @@ import DataTable from '@/Components/DataTable'
 import { Button } from '@/shadcn/ui/button'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import AdminReservationStatus from '@/Components/AdminPartials/AdminReservationStatus'
+import AdminReservationAddons from '@/Components/AdminPartials/AdminReservationAddons'
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -35,6 +36,29 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
+    accessorKey: "total_price",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Total Price
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )},
+      cell: ({ row }) => {
+        return (
+          <div className='flex flex-col items-start text-[0.8rem]'>
+              {`₱ ${row.original.total_price}`}
+          </div>
+        )
+      }
+
+  },
+
+  {
     accessorKey: "status",
     header: ({column}) => {
       return (
@@ -48,6 +72,46 @@ export const columns: ColumnDef<Order>[] = [
         </Button>
       )},
     cell: AdminReservationStatus
+  },
+  {
+    accessorKey: "service_type",
+    header: ({column}) => {
+      return (
+        <div className='relative'>
+        <Button
+          variant="ghost"
+          className='px-4 '
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Service Type
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+        </div>
+      )}, 
+    cell: ({ row, getValue }) => {
+      return (
+        <div className='flex flex-col items-start text-[0.8rem]'>
+            {row.original.service_type}
+        </div>
+      )
+    }
+  },
+  {
+    accessorKey: "addons",
+    header: ({column}) => {
+      return (
+        <div className='relative'>
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Add ons
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+        </div>
+      )}, 
+    cell: AdminReservationAddons
   },
   {
     accessorKey: "id",
@@ -64,7 +128,14 @@ export const columns: ColumnDef<Order>[] = [
         </Button>
         </div>
       )},
-    size: 1
+    size: 1,
+    cell: ({ row, getValue }) => {
+      return (
+        <div className='flex flex-col items-start text-[0.7rem]'>
+            {row.original.id}
+        </div>
+      )
+    }
   },
   {
     accessorKey: "user_id",
