@@ -84,7 +84,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
 
 Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('addmin.profile.destroy');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
 });
 
 Route::post('/send-message', [MessageBroadcastController::class, 'sendMessage'])->name('send.message');

@@ -18,10 +18,13 @@ class ProfileController extends Controller
      */
     public function index(Request $request): Response
     {
-        return Inertia::render('Admin/AccountSettings', [
+        $payload = [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
-        ]);
+            'success' => session('success'),
+            'error' => session('error'),
+        ];
+        return Inertia::render('Admin/AccountSettings', $payload);
     }
 
     /**
@@ -37,7 +40,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return back()->with('status', 'Profile updated');
     }
 
     /**
