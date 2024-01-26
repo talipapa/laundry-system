@@ -36,7 +36,7 @@ class TransactionFactory extends Factory
         return [
             'user_id' => fake()->numberBetween(50, 200),
             'status' => Arr::random(['waiting', 'washing', 'pickup', 'complete']),
-            'addons' => $addons,
+            'addons' => [ServiceAddons::SHOE_CLEANING->name, ServiceAddons::IRONING->name],
             'service_type' => $serviceType,
             'total_price' => $totalPrice,
             'is_reviewed' => Arr::random([true, false]),

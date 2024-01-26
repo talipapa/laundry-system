@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\AdminSetupController;
 use App\Http\Controllers\MessageBroadcastController;
 use App\Http\Controllers\ProfileController;
@@ -8,6 +9,10 @@ use App\Http\Controllers\ReservationQueueController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\WebsiteOptions;
+use App\Models\Transaction;
+use App\Models\User;
+use App\Selections\ServiceAddons;
+use App\Selections\TransactionStatus;
 use App\Selections\UserLevel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,9 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
 
 // Route for admins / owner
 Route::middleware(['auth', 'verified', 'admin-clearance', 'detect-owner'])->group(function (){
-    Route::get('/admin/dashboard', function(){
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/reservation', [ReservationQueueController::class, 'index'])->name('admin.reservation-queue');
     Route::get('/admin/customer', [CustomerController::class, 'index'])->name('admin.customer');
     

@@ -11,7 +11,7 @@ const AdminDashboardTemplate = ({children, auth, headerText}: any) => {
     <Head title={headerText} />
     <div className='flex flex-row h-screen w-screen overflow-hidden'>
         <AdminSidebar/>
-        <div className='bg-[#dddddd] dark:bg-[#232323] w-full overflow-y-scroll'>
+        <div className='bg-[#dddddd] dark:bg-[#424141] w-full overflow-y-scroll'>
             <AdminNavbar headerText={headerText} auth={auth}/>
             <div className='px-10 mt-4'>
                 {children}
