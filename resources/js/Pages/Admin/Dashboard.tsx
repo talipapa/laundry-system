@@ -163,7 +163,7 @@ export default function Dashboard({ auth, statistics, recentReservations, recent
     const CustomTooltip = ({ active, payload, label, description }: any) => {
         if (active && payload && payload.length) {
           return (
-            <div className="bg-black p-2 rounded-lg">
+            <div className="bg-[#f1f1f1] shadow-lg dark:bg-black p-2 rounded-lg">
               <p className="text-xl font-semibold">{label}</p>
               <p className="label">{`Over ${payload[0].value} transaction has this ${description}`}</p>
             </div>
@@ -184,12 +184,12 @@ export default function Dashboard({ auth, statistics, recentReservations, recent
                     <div className='bg-white dark:bg-[#2E2C2C] p-6 items-start flex flex-col rounded-lg'>
                         <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white'>TOTAL TRANSACTIONS</h1>
                         <h1 className='text-2xl font-semibold text-[#F9844A]'>{statistics['totalTransactions']}</h1>
-                        <div className='border-t-2 border-white mt-3 pt-2 w-full flex flex-row justify-between'>
-                            <span className='text-[#ffffff98]'>On-going transactions</span>
+                        <div className='border-t-2 border-slate-800 dark:border-white mt-3 pt-2 w-full flex flex-row justify-between'>
+                            <span className='dark:text-[#ffffff98]'>On-going transactions</span>
                             <span className='font-bold'>{statistics['totalCurrentOrder']}</span>
                         </div>
                         <div className='w-full flex flex-row justify-between'>
-                            <span className='text-[#ffffff98]'>Completed transactions</span>
+                            <span className='dark:text-[#ffffff98]'>Completed transactions</span>
                             <span className='font-bold'>{statistics['totalCompletedOrder']}</span>
                         </div>
                     </div>
@@ -209,8 +209,8 @@ export default function Dashboard({ auth, statistics, recentReservations, recent
                         <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white mb-4'>MOST PICKED ADD-ONS</h1>
                         <ResponsiveContainer width="100%" height={200}>
                             <BarChart data={addOns} layout="horizontal" margin={{right: 30, top:10}}>
-                                <XAxis dataKey="name" type='category' padding="gap" tick={{fill: "#ffffff"}} tickMargin={8}/>
-                                <YAxis tick={{fill: '#ffffffb3'}} />
+                                <XAxis dataKey="name" type='category' padding="gap" tickMargin={8}/>
+                                <YAxis />
                                 <Tooltip cursor={false} content={<CustomTooltip description="addon"/>} />
                                 <Bar name='mostly picked' dataKey="count">
                                     <LabelList dataKey="count" position="right" />

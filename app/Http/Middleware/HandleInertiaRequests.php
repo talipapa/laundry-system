@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\WebsiteOptions;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -29,11 +31,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $websiteDetails = WebsiteSetting::all()->first();
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'webInfo' => [
+                'websiteName' => $websiteDetails->name,
+                'merchantEmail' => $websiteDetails->email,
+                'merchantPhoneNumber' => $websiteDetails->phone_number,
+            ],
+            'geoLocation' => [
+                'merchantAddress' => $websiteDetails->address,
+                'longitude' => $websiteDetails->shop_longitude,
+                'latitude' => $websiteDetails->shop_latitude,
+            ]
         ];
     }
 }

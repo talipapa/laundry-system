@@ -7,18 +7,22 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ThemeProvider } from './Components/theme-provider';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+const rootElement: any = document.getElementById('app');
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
     setup({ el, App, props }) {
         const root = createRoot(el);
-
+        
+        
+        
         root.render(
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-                <App {...props} />
+                    <App {...props} />
             </ThemeProvider>
-    
         );
+        delete el.dataset.page;
     },
     progress: {
         color: '#4B5563',

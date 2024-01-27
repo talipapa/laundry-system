@@ -24,5 +24,15 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
+    webInfo: {
+        websiteName: string;
+        merchantEmail: string;
+        merchantPhoneNumber: string;
+    };
+    geoLocation: {
+        merchantAddress: string,
+        longitude: any,
+        latitude: any
+    }
     
 };
