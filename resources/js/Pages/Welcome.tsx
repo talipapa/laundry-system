@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, phpVersion }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
 
+
     return (
         <div className='min-h-[100vh] flex flex-col justify-between'>
             <Head title="Welcome" />

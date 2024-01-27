@@ -32,20 +32,21 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $websiteDetails = WebsiteSetting::all()->first();
+    
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
             ],
             'webInfo' => [
-                'websiteName' => $websiteDetails->name,
-                'merchantEmail' => $websiteDetails->email,
-                'merchantPhoneNumber' => $websiteDetails->phone_number,
+                'websiteName' => ($websiteDetails->name == null) ? env('APP_NAME') : $websiteDetails->name,
+                'merchantEmail' => ($websiteDetails->email == null) ? env('MERCHANT_MAIL_FROM_ADDRESS') : $websiteDetails->email,
+                'merchantPhoneNumber' => ($websiteDetails->phone == null) ? env('MERCHANT_PHONE_NUMBER') : $websiteDetails->phone,
             ],
             'geoLocation' => [
-                'merchantAddress' => $websiteDetails->address,
-                'longitude' => $websiteDetails->shop_longitude,
-                'latitude' => $websiteDetails->shop_latitude,
+                'merchantAddress' => ($websiteDetails->address == null) ? env('MERCHANT_ADDRESS') : $websiteDetails->address,
+                'longitude' => ($websiteDetails->shop_longitude == null) ? env('MERCHANT_LONGITUDE') : $websiteDetails->shop_longitude,
+                'latitude' => ($websiteDetails->shop_latitude == null) ? env('MERCHANT_LATITUDE') : $websiteDetails->shop_latitude,
             ]
         ];
     }
