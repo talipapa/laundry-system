@@ -47,7 +47,10 @@ data: TData[]
 
 const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTableProps<Tdata, TValue> & {customColumnVisiblity: any}) => {
 
-    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [sorting, setSorting] = React.useState<SortingState>([{
+      id: 'updated_at',
+      desc: true
+    }])
     const [filtering, setFiltering] = React.useState<any>('')
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(customColumnVisiblity)
     const [rowSelection, setRowSelection] = React.useState({})
@@ -70,6 +73,12 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
         pagination: {
           pageSize: 8,
         },
+        sorting: [
+          {
+            id: 'updated_at',
+            desc: true
+          }
+        ]
       },
       state: {
         sorting,

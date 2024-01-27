@@ -60,8 +60,16 @@ class AdminDashboard extends Controller
             'totalCustomer' => $totalCustomer
         ];
 
+        
+        $itemTransactionLimit = 10;
+        $recentReservations = Transaction::where('status', '!=', TransactionStatus::COMPLETE->value)->orderBy('created_at', 'desc')->limit($itemTransactionLimit)->get();
+        $recentCompletedTransactions = Transaction::where('status', TransactionStatus::COMPLETE->value)->orderBy('created_at', 'desc')->limit($itemTransactionLimit)->get();
+        
+
         $payload = [
             'statistics' => $statistics,
+            'recentReservations' => $recentReservations,
+            'recentCompletedTransactions' => $recentCompletedTransactions
         ];
 
 

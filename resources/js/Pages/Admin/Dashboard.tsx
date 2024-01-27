@@ -1,11 +1,163 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { Order, PageProps } from '@/types';
 import AdminDashboardTemplate from './AdminDashboardTemplate';
 import { LineChart, Line, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, Area, BarChart, Legend, Bar, ResponsiveContainer, LabelList, Text, PieChart, Pie } from 'recharts';
+import RecentTable from '@/Components/RecentTable';
+import { ColumnDef } from '@tanstack/react-table';
+import { Button } from '@/shadcn/ui/button';
+import { CaretSortIcon } from '@radix-ui/react-icons';
+import { format, formatDistance, parseISO } from 'date-fns';
+import { availableStatus } from '@/Helpers/OrderStatus';
+import AdminReservationAddons from '@/Components/AdminPartials/AdminReservationAddons';
 
 
-export default function Dashboard({ auth, statistics }: any) {
+export const columns: ColumnDef<Order>[] = [
+    {
+        accessorKey: "updated_at",
+        header: ({column}) => {
+        return (
+            <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            Updated
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        )},
+        size: 20,
+        cell: ({ row }) => {
+        return <div className='flex flex-col items-start'>
+            <div>
+            {
+                formatDistance(parseISO(row.getValue("updated_at")), new Date(), {includeSeconds: true, addSuffix: true})
+            }
+            </div>
+        </div>
+        },
+    },
+    {
+        accessorKey: "total_price",
+        header: ({column}) => {
+        return (
+            <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            Total Price
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        )},
+        cell: ({ row }) => {
+            return (
+            <div className='flex flex-col items-start text-[0.8rem]'>
+                {`₱ ${row.original.total_price}`}
+            </div>
+            )
+        }
+    
+    },
+    {
+        accessorKey: "status",
+        header: ({column}) => {
+        return (
+            <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            Status
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        )},
+        cell: ({ row, getValue }) => {
+    
+        return <div className='flex flex-col items-start'>
+        <div className={`${availableStatus[getValue() as keyof typeof availableStatus].color} text-black px-2 rounded-lg`}>
+            {availableStatus[row.getValue("status") as keyof typeof availableStatus].text}
+        </div>
+        </div>
+        }
+    },
+    {
+        accessorKey: "service_type",
+        header: ({column}) => {
+        return (
+            <div className='relative'>
+            <Button
+            variant="ghost"
+            className='px-4 '
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            Service Type
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+            </div>
+        )}, 
+        cell: ({ row, getValue }) => {
+        return (
+            <div className='flex flex-col items-start text-[0.8rem]'>
+                {row.original.service_type}
+            </div>
+        )
+        }
+    },
+    {
+        accessorKey: "addons",
+        header: ({column}) => {
+        return (
+            <div className='relative'>
+            <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            Add ons
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+            </div>
+        )}, 
+        cell: AdminReservationAddons
+    },
+    {
+        accessorKey: "id",
+        header: ({column}) => {
+        return (
+            <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            ID
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        )},
+        size: 1
+    },
+    {
+        accessorKey: "user_id",
+        header: ({column}) => {
+        return (
+            <Button
+            variant="ghost"
+            className='px-4'
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+            Customer ID
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        )},
+        size: 1
+    },
+    ]
+  
+const customColumnVisiblity = {
+'created_at': false,
+}
+
+export default function Dashboard({ auth, statistics, recentReservations, recentCompletedTransactions }: any) {
 
     const addOns = statistics['totalAddOnsCount']
     const CustomTooltip = ({ active, payload, label, description }: any) => {
@@ -21,9 +173,13 @@ export default function Dashboard({ auth, statistics }: any) {
         return null;
     };
 
+
+
+
+
     return (
         <AdminDashboardTemplate auth={auth} headerText="Dashboard">
-            <div className='flex flex-col space-y-6'>
+            <div className='flex flex-col space-y-6 mb-6'>
                 <div className='grid xl:grid-cols-3 gap-3 items-start'>
                     <div className='bg-white dark:bg-[#2E2C2C] p-6 items-start flex flex-col rounded-lg'>
                         <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white'>TOTAL TRANSACTIONS</h1>
@@ -41,6 +197,10 @@ export default function Dashboard({ auth, statistics }: any) {
                         <h1 className='text-sm xl:text-lg  font-semibold text-black dark:text-white'>TOTAL REVENUE</h1>
                         <h1 className='text-2xl font-semibold text-[#F9844A]'>{`₱ ${statistics['totalTransactionPrice']}`}</h1>
 
+                    </div>
+                    <div className='bg-white dark:bg-[#2E2C2C] p-6 items-start flex flex-col rounded-lg'>
+                        <h1 className='text-sm xl:text-lg  font-semibold text-black dark:text-white'>TOTAL CUSTOMERS</h1>
+                        <h1 className='text-2xl font-semibold text-[#F9844A]'>{`${statistics['totalCustomer']}`}</h1>
                     </div>
 
                 </div>
@@ -73,9 +233,14 @@ export default function Dashboard({ auth, statistics }: any) {
                     
                 </div>
 
-
-
-
+                <div className='bg-white dark:bg-[#2E2C2C] p-6 rounded-lg text-center'>
+                    <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white mb-4'>RECENT TRANSACTIONS</h1>
+                    <RecentTable columns={columns} data={recentReservations} customColumnVisiblity={undefined}/>
+                </div>
+                <div className='bg-white dark:bg-[#2E2C2C] p-6 rounded-lg text-center'>
+                    <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white mb-4'>RECENT COMPLETED TRANSACTIONS</h1>
+                    <RecentTable columns={columns} data={recentCompletedTransactions} customColumnVisiblity={undefined}/>
+                </div>
             </div>
         </AdminDashboardTemplate>
     );
