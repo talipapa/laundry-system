@@ -4,6 +4,7 @@ import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/shadcn"
+import { OmitUndefined } from "class-variance-authority/types"
 
 const ToastProvider = ToastPrimitives.Provider
 
@@ -38,6 +39,8 @@ const toastVariants = cva(
     },
   }
 )
+
+
 
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
