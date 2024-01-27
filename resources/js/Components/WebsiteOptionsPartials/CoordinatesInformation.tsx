@@ -29,7 +29,6 @@ const CoordinatesInformation = ({webSettings}: any) => {
                     toast({title: 'Successfully saved', variant: 'success'})
                 },
                 onError: (e) => {
-                    console.log(e)
                     setIsDisabledButton(false)
                     toast({title: 'Error', description: "Something went wrong", variant: 'destructive'})
                 },
@@ -37,7 +36,6 @@ const CoordinatesInformation = ({webSettings}: any) => {
                     setIsDisabledButton(false)
                 }
             })
-            console.log(values)
         }
     })
     const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)

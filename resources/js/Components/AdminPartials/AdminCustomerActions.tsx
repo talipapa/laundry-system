@@ -100,14 +100,12 @@ const AdminCustomerActions = ({row}: any) => {
     }
     const destroyUser = (e: any) => {
       e.preventDefault()
-      console.log(row.original.id)
       router.delete(route('admin.customer.destroy', `${row.original.id}`), {
         onSuccess: () => {
           toast({title: 'User deleted', description: 'User password has been successfully deleted', variant: 'success'})
           setOpen(false)
         },
         onError: (e) => {
-          console.log(e)
           toast({title: 'Error', description: e.toString(), variant: 'destructive'})
         },
         onStart: () => {

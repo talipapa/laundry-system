@@ -16,7 +16,6 @@ const AdminSetup = ({auth, webSettings}: any) => {
     zoom: 12,
   })
 
-  console.log(webSettings)
   const [currentPin, setCurrentPin] = React.useState<any>(null)
 
 

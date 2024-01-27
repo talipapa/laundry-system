@@ -79,7 +79,6 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
       },
       meta: {
         updateRole: (rowIndex:any, userId: any, columnId: any, value: any) => {
-          // console.log(rowIndex, userId, columnId, value)
           const payload = {
             id: userId,
             role: value
@@ -91,7 +90,6 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
               
             },
             onError: (e) => {
-              console.log(e)
               toast({title: 'Successfully saved', description: 'Something went wrong', variant: 'destructive'})
               router.reload()
             }
@@ -99,7 +97,6 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
           })
         },
         updateStatus: (rowIndex:any, transactionId: any, columnId: any, value: any) => {
-          console.log(rowIndex, transactionId, columnId, value)
           const payload = {
             id: transactionId,
             status: value
