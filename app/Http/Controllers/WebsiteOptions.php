@@ -33,7 +33,7 @@ class WebsiteOptions extends Controller
 
         if ($webSettings == null){
             $webSettings = WebsiteSetting::create([
-                'phone' => $request->phone,
+                'phone_number' => $request->phone,
                 'email' => $request->email,
                 'address' => $request->address
             ]);
@@ -41,7 +41,7 @@ class WebsiteOptions extends Controller
             return redirect()->back()->with('success', 'Contact info updated successfully');
         }
         $webSettings->update([
-            'phone' => $request->phone,
+            'phone_number' => $request->phone,
             'email' => $request->email,
             'address' => $request->address
         ]);

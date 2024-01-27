@@ -41,6 +41,7 @@ const BusinessInformation = ({webSettings}: any) => {
     })
     const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
 
+    console.log(webSettings)
   return (
     <form onSubmit={handleSubmit} className='w-full bg-white  dark:bg-[#2E2C2C] rounded-md p-6 dark:text-white'>
         <h2 className='text-lg mb-3'>Business information</h2>

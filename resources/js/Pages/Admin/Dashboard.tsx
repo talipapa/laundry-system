@@ -45,7 +45,7 @@ export default function Dashboard({ auth, statistics }: any) {
 
                 </div>
                 <div className='grid xl:grid-cols-3 gap-10 bg-white dark:bg-[#2E2C2C] p-6 pb-14 rounded-lg'>
-                    <div className='max-h-[300px] w-[full] col-span-2 flex flex-col items-center'>
+                    <div className='max-h-[300px] w-[full] xl:col-span-2 flex flex-col items-center'>
                         <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white mb-4'>MOST PICKED ADD-ONS</h1>
                         <ResponsiveContainer width="100%" height={200}>
                             <BarChart data={addOns} layout="horizontal" margin={{right: 30, top:10}}>
@@ -61,13 +61,13 @@ export default function Dashboard({ auth, statistics }: any) {
                     <div className='max-h-[300px] w-[full] flex flex-col items-center'>
                         <h1 className='text-sm xl:text-lg font-semibold text-black dark:text-white mb-4'>SERVICE TYPE</h1>
                         <ResponsiveContainer width="100%" height={200}>
-                        <PieChart>
-                            <Legend />
-                            <Tooltip content={<CustomTooltip description="addon"/>} />
-                            <Pie data={statistics['serviceTypeData']} dataKey="count" nameKey="name" >
-                                <LabelList dataKey="count" position="inside"  />
-                            </Pie>
-                        </PieChart>
+                            <PieChart>
+                                <Legend />
+                                <Tooltip content={<CustomTooltip description="service type"/>} />
+                                <Pie data={statistics['serviceTypeData']} dataKey="count" nameKey="name" >
+                                    <LabelList dataKey="count" position="inside"  />
+                                </Pie>
+                            </PieChart>
                         </ResponsiveContainer>
                     </div>
                     

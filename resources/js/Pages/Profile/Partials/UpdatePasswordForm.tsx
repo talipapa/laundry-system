@@ -71,8 +71,6 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
                     if (e.current_password) {
                         setErrors({current_password: 'Invalid password'})
                     }
-
-                    console.log(errors)
                 
                 },
                 onFinish: () => {
@@ -103,7 +101,6 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
                     propTouched={touched.current_password}
                     values={values.current_password}
                     onChange={handleChange}
-                    ref={currentPasswordInput}
                     onBlur={handleBlur}
                     className="flex flex-col space-y-1 w-full dark:text-white"
                 />
@@ -113,7 +110,6 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
                     type="password"
                     propError={errors.password}
                     propTouched={touched.password}
-                    ref={passwordInput}
                     values={values.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -126,7 +122,6 @@ export default function UpdatePasswordForm({ className = '' }: { className?: str
                     type="password"
                     propError={errors.password_confirmation}
                     propTouched={touched.password_confirmation}
-                    ref={passwordInput}
                     values={values.password_confirmation}
                     onChange={handleChange}
                     onBlur={handleBlur}

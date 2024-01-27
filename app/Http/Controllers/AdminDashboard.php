@@ -17,6 +17,7 @@ class AdminDashboard extends Controller
         $totalTransactions = Transaction::all()->count();
         $totalCurrentOrder = Transaction::where('status', '!=', TransactionStatus::COMPLETE->value)->get()->count();
         $totalCompletedOrder = Transaction::where('status', TransactionStatus::COMPLETE->value)->get()->count();
+        $totalCustomer = User::where('role', UserLevel::CUSTOMER->value)->get()->count();
         $totalStaffMember = User::where('role', UserLevel::STAFF->value)->get()->count();
 
         $serviceTypeData = [
@@ -56,6 +57,7 @@ class AdminDashboard extends Controller
             'totalStaffMember' => $totalStaffMember,
             'totalAddOnsCount' => $totalAddOnsCount,
             'serviceTypeData' => $serviceTypeData,
+            'totalCustomer' => $totalCustomer
         ];
 
         $payload = [
