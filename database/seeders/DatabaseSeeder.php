@@ -26,5 +26,6 @@ class DatabaseSeeder extends Seeder
 
         // Make a factory of 200 transactions from transaction model
         \App\Models\Transaction::factory(200)->create();
+        \App\Models\Review::factory(50)->create();
     }
 }

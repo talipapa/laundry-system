@@ -6,6 +6,7 @@ import { GiWaterSplash } from "react-icons/gi";
 import { GiClothes } from "react-icons/gi";
 import { GiRunningShoe } from "react-icons/gi";
 import SectionHeader from '@/Components/SectionHeader';
+import StarRatings from 'react-star-ratings';
 
 
 
@@ -90,7 +91,7 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
                     </div>
                 </CanvasRestriction>
 
-
+                {/* Vlog container */}
                 <CanvasRestriction className='w-full bg-[#EEEEEE] grid grid-cols-2 gap-12'>
                     <div>
                         <SectionHeader className="items-start" subjectHeader="VLOG" titleHeader="MONTALBAN LAUNDRY"/>
@@ -100,18 +101,27 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
 
                     </div>
                     <div className='aspect-video'>
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/MIKl8khLW9Y?si=NhA0Qw93BccpNELo" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/MIKl8khLW9Y?si=NhA0Qw93BccpNELo" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
                     </div>
-         
-
-
                 </CanvasRestriction>
-        
+            </div>
+
+            <div className='w-full bg-[#ffffff] py-10 flex flex-col items-center space-y-16 shadow-xl'>
+                <div className={`mb-5 flex flex-col items-center space-y-2`}>
+                    <h3 className='text-md text-[#F9844A] font-semibold'>REVIEWS</h3>
+                    <StarRatings
+                        rating={4}
+                        starRatedColor="#eeaf61"
+                        starDimension="40px"
+                        starSpacing="15px"
+                    />
+                </div>
             </div>
 
             {/* Footer container */}
             <div className={`w-full h-[250px] bg-[#131313]`}>
                 <CanvasRestriction>
+
 
                 </CanvasRestriction>
             
