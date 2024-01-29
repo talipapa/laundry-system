@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\WebsiteOptions;
+use App\Models\Review;
 use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -32,21 +33,25 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $websiteDetails = WebsiteSetting::all()->first();
-    
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
             ],
             'webInfo' => [
-                'websiteName' => ($websiteDetails->name == null) ? env('APP_NAME') : $websiteDetails->name,
-                'merchantEmail' => ($websiteDetails->email == null) ? env('MERCHANT_MAIL_FROM_ADDRESS') : $websiteDetails->email,
-                'merchantPhoneNumber' => ($websiteDetails->phone == null) ? env('MERCHANT_PHONE_NUMBER') : $websiteDetails->phone,
+                'websiteName' => ($websiteDetails?->name == null) ? env('APP_NAME') : $websiteDetails->name,
+                'merchantEmail' => ($websiteDetails?->email == null) ? env('MERCHANT_MAIL_FROM_ADDRESS') : $websiteDetails->email,
+                'merchantPhoneNumber' => ($websiteDetails?->phone == null) ? env('MERCHANT_PHONE_NUMBER') : $websiteDetails->phone,
+                'review' => [
+                    'reviewCount' => Review::all()->sum('rating'),
+                    'reviewMessages' => Review::orderBy('created_at', 'desc')->take(50)->get(),
+                    'reviewAverage' => Review::all()->sum('rating') / Review::all()->count(),
+                ],
             ],
             'geoLocation' => [
-                'merchantAddress' => ($websiteDetails->address == null) ? env('MERCHANT_ADDRESS') : $websiteDetails->address,
-                'longitude' => ($websiteDetails->shop_longitude == null) ? env('MERCHANT_LONGITUDE') : $websiteDetails->shop_longitude,
-                'latitude' => ($websiteDetails->shop_latitude == null) ? env('MERCHANT_LATITUDE') : $websiteDetails->shop_latitude,
+                'merchantAddress' => ($websiteDetails?->address == null) ? env('MERCHANT_ADDRESS') : $websiteDetails->address,
+                'longitude' => ($websiteDetails?->shop_longitude == null) ? env('MERCHANT_LONGITUDE') : $websiteDetails->shop_longitude,
+                'latitude' => ($websiteDetails?->shop_latitude == null) ? env('MERCHANT_LATITUDE') : $websiteDetails->shop_latitude,
             ]
         ];
     }

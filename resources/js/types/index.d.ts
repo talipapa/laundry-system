@@ -18,6 +18,10 @@ export interface Order {
     updated_at: string;
 }
 
+export interface Review {
+    reviewAverage: number,
+    reviewCount: number, 
+}
 
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
@@ -28,6 +32,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         websiteName: string;
         merchantEmail: string;
         merchantPhoneNumber: string;
+        review: any;
     };
     geoLocation: {
         merchantAddress: string,

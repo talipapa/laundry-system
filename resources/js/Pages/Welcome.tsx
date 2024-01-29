@@ -7,18 +7,27 @@ import { GiClothes } from "react-icons/gi";
 import { GiRunningShoe } from "react-icons/gi";
 import SectionHeader from '@/Components/SectionHeader';
 import StarRatings from 'react-star-ratings';
+import useEmblaCarousel from 'embla-carousel-react';
+import { useEffect } from 'react';
 
 
 
 
 export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, phpVersion }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
 
-
+    const [emblaRef, emblaApi] = useEmblaCarousel()
+    
+    const reviews: [] = webInfo['review']['reviewMessages']
+    useEffect(() => {
+        if (emblaApi) {
+        console.log(emblaApi.slideNodes()) // Access API
+        }
+    }, [emblaApi])
     return (
         <div className='xl:min-h-[400px] flex flex-col justify-between'>
             <Head title="Welcome" />
             {/* Header container */}
-            <div className='sticky top-0'>
+            <div className='sticky top-0 z-[100]'>
                 {/* Notification navbar */}
                 <div className={`w-full h-[60px] bg-[rgb(249,132,74)]`}>
                     <CanvasRestriction className="flex flex-col items-center justify-center">
@@ -64,25 +73,25 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
                 {/* About us container */}
                 <CanvasRestriction>
                     <SectionHeader className="items-center" subjectHeader="ABOUT US" titleHeader="WE CAN DO"/>
-                    <div className='grid grid-cols-3 gap-12 w-full'>
+                    <div className='grid md:grid-cols-3 gap-2 xl:gap-12 w-full'>
                         <div className='p-8 bg-white shadow-xl w-full h-full rounded-2xl'>
                             <GiWaterSplash className='text-4xl text-orange-600'/>
                             <h4 className='text-2xl font-semibold mb-2 tracking-wider'>Laundry</h4>
-                            <p>
+                            <p className='text-sm xl:text-lg'>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tincidunt odio, vel convallis nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas volutpat arcu a nulla efficitur, sit amet tempor nisl varius. Mauris vitae sapien tincidunt ex pretium facilisis et et metus. Sed non eros eu orci hendrerit lacinia
                             </p>
                         </div>
                         <div className='p-8 bg-white shadow-xl w-full h-full rounded-2xl'>
                             <GiClothes className='text-4xl text-orange-600'/>
                             <h4 className='text-2xl font-semibold mb-2 tracking-wider'>Ironing</h4>
-                            <p>
+                            <p className='text-sm xl:text-lg'>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tincidunt odio, vel convallis nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas volutpat arcu a nulla efficitur, sit amet tempor nisl varius. Mauris vitae sapien tincidunt ex pretium facilisis et et metus. Sed non eros eu orci hendrerit lacinia
                             </p>
                         </div>
                         <div className='p-8 bg-white shadow-xl w-full h-full rounded-2xl'>
                             <GiRunningShoe className='text-4xl text-orange-600'/>
                             <h4 className='text-2xl font-semibold mb-2 tracking-wider'>Shoe cleaning</h4>
-                            <p>
+                            <p className='text-sm xl:text-lg'>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel tincidunt odio, vel convallis nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas volutpat arcu a nulla efficitur, sit amet tempor nisl varius. Mauris vitae sapien tincidunt ex pret
                                 
                             </p>
@@ -106,16 +115,42 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
                 </CanvasRestriction>
             </div>
 
-            <div className='w-full bg-[#ffffff] py-10 flex flex-col items-center space-y-16 shadow-xl'>
-                <div className={`mb-5 flex flex-col items-center space-y-2`}>
+            <div className='w-full bg-[#ffffff] py-10 flex flex-col items-center space-y-7 shadow-xl'>
+                <div className={`flex flex-col items-center space-y-2 w-full`}>
                     <h3 className='text-md text-[#F9844A] font-semibold'>REVIEWS</h3>
                     <StarRatings
-                        rating={4}
+                        rating={webInfo['review']['reviewAverage'] as number}
                         starRatedColor="#eeaf61"
                         starDimension="40px"
                         starSpacing="15px"
                     />
                 </div>
+                <CanvasRestriction>
+                    <div className="embla w-full" ref={emblaRef}>
+                        <div className="embla__container">
+                            {
+                                reviews.map((review, index) => (
+                                    <div key={index} className='embla__slide bg-[#f1f1f1] rounded-lg shadow  mx-5 flex flex-col items-start p-6 space-y-3'>
+                                        <div>
+                                            <div>
+                                                {review['fullName']}
+                                            </div>
+                                            <StarRatings
+                                                rating={parseFloat(review['rating'])}
+                                                starRatedColor="#eeaf61"
+                                                starDimension="25px"
+                                                starSpacing="5px"
+                                            />
+                                        </div>
+                                        <div>
+                                            {review['comment']}
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </CanvasRestriction>
             </div>
 
             {/* Footer container */}
