@@ -6,9 +6,9 @@ export type VariantProps<Component extends (...args: any) => any> = Omit<OmitUnd
 
 const SectionHeader = ({subjectHeader, titleHeader, className}: any ) => {
   return (
-    <div className={`mb-5 flex flex-col ${className}`}>
-        <h3 className='text-md text-[#F9844A] font-semibold'>{subjectHeader}</h3>
-        <h2 className='text-3xl font-bold'>{titleHeader}</h2>
+    <div className={`mb-2 xl:mb-5 flex flex-col ${className}`}>
+        <h3 className='text-sm text-[#F9844A] font-semibold'>{subjectHeader}</h3>
+        <h2 className='text-lg xl:text-3xl font-bold'>{titleHeader}</h2>
     </div>
   )
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\ReservationQueueController;
 
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\WebsiteOptions;
 use App\Models\Transaction;
 use App\Models\User;
@@ -37,6 +38,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/services', [ServicesController::class, 'index'])->name('services');
 
 
 Route::middleware(['auth', 'verified'])->group(function (){

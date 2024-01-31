@@ -1,4 +1,4 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, router } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import CanvasRestriction from '@/Components/CanvasRestriction';
 import { Parallax } from 'react-scroll-parallax';
@@ -8,68 +8,37 @@ import { GiRunningShoe } from "react-icons/gi";
 import SectionHeader from '@/Components/SectionHeader';
 import StarRatings from 'react-star-ratings';
 import useEmblaCarousel from 'embla-carousel-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { MdEmail } from "react-icons/md";
+import { FaPhoneSquareAlt } from "react-icons/fa";
+import GuestNavbar from '@/Components/CustomerPartials/GuestNavbar';
+import GuestPageLayout from '@/Components/CustomerPartials/GuestPageLayout';
+import GuestFootbar from '@/Components/CustomerPartials/GuestFootbar';
 
 
 
 
 export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, phpVersion }: PageProps<{ laravelVersion: string, phpVersion: string }>) {
 
+
+
     const [emblaRef, emblaApi] = useEmblaCarousel()
-    
     const reviews: [] = webInfo['review']['reviewMessages']
-    useEffect(() => {
-        if (emblaApi) {
-        console.log(emblaApi.slideNodes()) // Access API
-        }
-    }, [emblaApi])
     return (
-        <div className='xl:min-h-[400px] flex flex-col justify-between'>
+        <GuestPageLayout>
             <Head title="Welcome" />
             {/* Header container */}
-            <div className='sticky top-0 z-[100]'>
-                {/* Notification navbar */}
-                <div className={`w-full h-[60px] bg-[rgb(249,132,74)]`}>
-                    <CanvasRestriction className="flex flex-col items-center justify-center">
-                        <span className='font-semibold text-xl select-none'>FIRST OPENING 60% OFF 🎉🎉🎉</span>
-                    </CanvasRestriction>
-                </div>
-
-                {/* Navbar */}
-                <div className={`w-full h-[90px] bg-[#131313]`}>
-                    <CanvasRestriction className="flex flex-row items-center justify-between">
-                        <h1 className='text-[#F9844A] text-xl font-semibold'>{webInfo['websiteName']}</h1>
-                        
-                        <div className='flex flex-row space-x-6'>
-                            <Link href='/' className="text-white hover:text-[#F9844A]">Home</Link>
-                            <Link href='/services' className="text-white hover:text-[#F9844A]">Services</Link>
-                            <Link href='/services' className="text-white hover:text-[#F9844A]">About us</Link>
-                            <Link href='/services' className="text-white hover:text-[#F9844A]">Contact us</Link>
-
-                        </div>
-
-
-                        <div className='flex flex-row space-x-6'>
-                            <Link href={route('login')} className="text-white hover:text-[#F9844A]">Login</Link>
-                            <Link href={route('register')} className="text-white hover:text-[#F9844A]">Register</Link>
-                        </div>
-                        
-                        
-                        
-
-                    </CanvasRestriction>
-                </div>
-            </div>
+            <GuestNavbar webInfo={webInfo}/>
 
             {/* Hero container */}
-            <div className='h-[400px] w-full overflow-hidden z-[-5]'>
-                <Parallax speed={-100} translateY={[-50, 5]}>
-                    <img  src='/hero-landing.png' className='h-full w-full object-cover xl:object-contain object-top'/>
+            <div className='h-[100vh] max-h-[400px] w-full overflow-hidden z-[-5]'>
+                <Parallax speed={-100} translateY={[-50, 10]}>
+                    <img  src='/hero-landing.png' loading='lazy' className='h-full w-full object-cover xl:object-contain object-top'/>
                 </Parallax>
             </div>
 
             {/* Main content container */}
-            <div className='w-full bg-[#EEEEEE] py-10 flex flex-col items-center space-y-16'>
+            <div className='w-full bg-[#EEEEEE] py-24 flex flex-col items-center space-y-24'>
                 {/* About us container */}
                 <CanvasRestriction>
                     <SectionHeader className="items-center" subjectHeader="ABOUT US" titleHeader="WE CAN DO"/>
@@ -115,15 +84,15 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
                 </CanvasRestriction>
             </div>
 
-            <div className='w-full bg-[#ffffff] py-10 flex flex-col items-center space-y-7 shadow-xl'>
-                <div className={`flex flex-col items-center space-y-2 w-full`}>
-                    <h3 className='text-md text-[#F9844A] font-semibold'>REVIEWS</h3>
+            <div className='w-full bg-[#ffffff] py-24 flex flex-col items-center space-y-7 shadow-xl'>
+                <div className={`flex flex-col items-center space-y-1 w-full`}>
                     <StarRatings
                         rating={webInfo['review']['reviewAverage'] as number}
                         starRatedColor="#eeaf61"
-                        starDimension="40px"
+                        starDimension="30px"
                         starSpacing="15px"
                     />
+                    <h3 className='text-md text-[#F9844A] font-semibold'>REVIEWS</h3>
                 </div>
                 <CanvasRestriction>
                     <div className="embla w-full" ref={emblaRef}>
@@ -152,16 +121,24 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
                     </div>
                 </CanvasRestriction>
             </div>
-
-            {/* Footer container */}
-            <div className={`w-full h-[250px] bg-[#131313]`}>
-                <CanvasRestriction>
-
-
+            <div className='bg-[#f1f1f1] shadow-xl'>
+                <CanvasRestriction className='w-full py-24 flex flex-col items-center space-y-7 '>
+                    <div className='w-full relative flex flex-col items-center'>
+                        <span className='text-4xl'>Clean and fresh laundry is just a click away</span>
+                        <img src='/stars.svg' className='min-h-[90px] min-w-[0%] max-w-[70%] absolute top-0 mt-[-30px]'/>
+                    </div>
+                    
+                    <button onClick={() => router.get(route('services'))} className='bg-[#F9844A] hover:bg-[#cf6f3f] w-[200px]  text-white p-4 rounded-full hover:shadow-lg ease-in-out duration-200'>Reserve now</button>
                 </CanvasRestriction>
-            
             </div>
 
-        </div>
+
+
+
+
+            {/* Footer container */}
+        <GuestFootbar webInfo={webInfo} geoLocation={geoLocation}/>
+
+        </GuestPageLayout>
     );
 }
