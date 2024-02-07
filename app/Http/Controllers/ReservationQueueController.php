@@ -16,7 +16,6 @@ class ReservationQueueController extends Controller
             'currentOrders' => $currentOrders
         ];
 
-        
         return Inertia::render('Admin/ReservationQueue', $payload);
     }
 

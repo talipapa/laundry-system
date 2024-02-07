@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean("is_reviewed")->default(false);
             $table->string("service_type");
             $table->integer("total_price");
+            $table->dateTime("reserved_at");
             $table->json("addons")->nullable();
             $table->timestamps();
         });

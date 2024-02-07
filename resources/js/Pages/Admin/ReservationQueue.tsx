@@ -94,7 +94,8 @@ export const columns: ColumnDef<Order>[] = [
             {row.original.service_type}
         </div>
       )
-    }
+    },
+    minSize: 5000
   },
   {
     accessorKey: "addons",
@@ -187,8 +188,27 @@ const customColumnVisiblity = {
 const ReservationQueue = ({auth, currentOrders}: any) => {
   const [isChecked, setIsChecked] = React.useState(false)
   const [data, setData] = React.useState(currentOrders)
+
+  const newData = {
+    id: Math.random() * 1000,
+    user_id: 1,
+    is_reviewed: false,
+    total_price: 1000,
+    status: {name: 'waiting', foreground: 'text-yellow-500'},
+    service_type: 'home service',
+    addons: ['SHOE CLEANING', 'BAG CLEANING'],
+    created_at: new Date(),
+    updated_at: new Date()
+  }
+
+  const appendData = () => {
+    setData((prevData: any) => [newData, ...prevData]
+    )
+  }
+
   return (
     <AdminDashboardTemplate headerText="Reservation" auth={auth}>
+        <Button onClick={() => appendData()}>Append data</Button>
         <DataTable columns={columns} data={data} customColumnVisiblity={customColumnVisiblity}/>
     </AdminDashboardTemplate>
   )

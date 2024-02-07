@@ -11,6 +11,8 @@ export interface User {
 export interface Order {
     id: number;
     user_id: number;
+    is_reviewed: number | boolean;
+    addons: Array<string>;
     status: string;
     service_type: string;
     total_price: number;

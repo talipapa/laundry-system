@@ -17,7 +17,10 @@ class Transaction extends Model
         'user_id',
         'status',
         'is_reviewed',
+        'reserved_at',
         'addons',
+        'total_price',
+        'service_type'
     ];
 
     protected $casts = [
@@ -28,5 +31,23 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    protected $statusMapping = [
+        'waiting' => 'text-yellow-400',
+        'washing' => 'text-blue-400',
+        'pickup' => 'text-green-400',
+        'complete' => 'text-green-100',
+    ];
+
+    public function getStatusAttribute($value)
+    {
+        if (isset($this->attributes['status']) && array_key_exists($this->attributes['status'], $this->statusMapping)) {
+            return [
+                'name' => $this->attributes['status'],
+                'foreground' => $this->statusMapping[$this->attributes['status']]
+            ];
+        }
+        return $value;
     }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 
 const AdminReservationAddons = ({row, table, column, getValue}: any) => {
     const keys = Object.keys(getValue())
+    
   return (
     <ul>
         {keys.map((addon, index) => (

@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     ColumnDef,
-    ColumnFiltersState,
     SortingState,
     VisibilityState,
     flexRender,
@@ -13,14 +12,10 @@ import {
   } from "@tanstack/react-table"
   
   import { Button } from "@/shadcn/ui/button"
-  import { Checkbox } from "@/shadcn/ui/checkbox"
   import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/shadcn/ui/dropdown-menu"
   import { Input } from "@/shadcn/ui/input"
@@ -37,6 +32,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { router } from '@inertiajs/react'
 import { useToast } from '@/shadcn/ui/use-toast'
 import { Toaster } from '@/shadcn/ui/toaster'
+import { AnimatePresence } from "framer-motion"
 
 interface DataTableProps<TData, TValue> {
 columns: ColumnDef<TData, TValue>[]
@@ -47,17 +43,28 @@ data: TData[]
 
 const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTableProps<Tdata, TValue> & {customColumnVisiblity: any}) => {
 
-    const [sorting, setSorting] = React.useState<SortingState>([{
-      id: 'updated_at',
-      desc: true
-    }])
+    const [sorting, setSorting] = React.useState<SortingState>([])
+    // const [sorting, setSorting] = React.useState<SortingState>([{
+    //   id: 'updated_at',
+    //   desc: true
+    // }])
+
+    const [tempData, setTempData] = useState(data)
+
+    useEffect(() => {
+      setTempData(data)
+
+    }, [data])
+
+    
+
     const [filtering, setFiltering] = React.useState<any>('')
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(customColumnVisiblity)
     const [rowSelection, setRowSelection] = React.useState({})
   
     const {toast} = useToast()
     const table = useReactTable({
-      data,
+      data: tempData,
       columns,
       onGlobalFilterChange: setFiltering,
       getCoreRowModel: getCoreRowModel(),
@@ -85,9 +92,10 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
         globalFilter: filtering,
         columnVisibility,
         rowSelection,
+        
       },
       meta: {
-        updateRole: (rowIndex:any, userId: any, columnId: any, value: any) => {
+        updateRole: (rowIndex:any, userId: any, columnId: any, value: any, ) => {
           const payload = {
             id: userId,
             role: value
@@ -96,7 +104,20 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
             preserveState: true,
             onSuccess: () => {
               toast({title: 'Successfully saved', variant: 'success'})
+              setTempData((prev) =>
+                prev.map((row, index) =>
+                  index === rowIndex
+                  ? {
+                    ...prev[rowIndex],
+                    [columnId]: value,
+                  }
+                  : row
+                )
+              ) 
+
+       
               
+    
             },
             onError: (e) => {
               toast({title: 'Successfully saved', description: 'Something went wrong', variant: 'destructive'})
@@ -105,32 +126,45 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
 
           })
         },
-        updateStatus: (rowIndex:any, transactionId: any, columnId: any, value: any) => {
+        updateStatus: (rowIndex:any, transactionId: any, columnId: any, value: any, colorValue: any, originalValue: any) => {
+          
           const payload = {
             id: transactionId,
             status: value
           }
+          
+          
           router.put(route('admin.transaction.status'), payload, {
             onSuccess: () => {
-              router.reload()
               toast({title: 'Successfully saved', variant: 'success'})
-              
+              setTempData((prev) =>
+                prev.map((row, index) =>
+                  index === rowIndex
+                  ? {
+                    ...prev[rowIndex],
+                    [columnId]: {name: value, foreground: colorValue},
+                  }
+                  : row
+                )
+              ) 
             },
             onError: () => {
-              toast({title: 'Successfully saved', description: 'Something went wrong', variant: 'destructive'})
-              router.reload()
+              toast({title: 'Something went wrong', variant: 'destructive'})
             }
 
           })
-        }
+        },
       }
       
     })
 
 
+  
+
     return (
       
         <div className="w-full">
+
           <div className="flex items-center justify-between py-4 ">
             <Input
               placeholder="Search..."
@@ -185,54 +219,57 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
               </DropdownMenu>
             </div>
           </div>
-          <Table className='bg-[#ffffff] dark:bg-[#2e2c2c] shadow-xl'>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
+          
+          <AnimatePresence>
+            <Table className='bg-[#ffffff] dark:bg-[#2e2c2c] shadow-xl'>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      )
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody >                
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, index) => (
+                    <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className='px-6'>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} className='px-6'>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>                                                                                   
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                )}
+              </TableBody>
+            </Table>
+          </AnimatePresence>
           <div className="flex items-center space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
               {table.getFilteredSelectedRowModel().rows.length} of{" "}

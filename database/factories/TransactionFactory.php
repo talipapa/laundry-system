@@ -39,6 +39,7 @@ class TransactionFactory extends Factory
             'addons' => [ServiceAddons::SHOE_CLEANING->name, ServiceAddons::IRONING->name],
             'service_type' => $serviceType,
             'total_price' => $totalPrice,
+            'reserved_at' => fake()->dateTimeBetween('-1 week', '+1 week'),
             'is_reviewed' => Arr::random([true, false]),
         ];
     }

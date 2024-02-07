@@ -40,6 +40,8 @@ Route::get('/', function () {
 });
 
 Route::get('/services', [ServicesController::class, 'index'])->name('services');
+Route::post('/services', [ServicesController::class, 'guestCreateBooking'])->name('services.booking');
+
 
 
 Route::middleware(['auth', 'verified'])->group(function (){

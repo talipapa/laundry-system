@@ -72,11 +72,11 @@ export const columns: ColumnDef<Order>[] = [
             <CaretSortIcon className="ml-2 h-4 w-4" />
             </Button>
         )},
-        cell: ({ row, getValue }) => {
+        cell: ({ row, getValue }: any) => {
     
         return <div className='flex flex-col items-start'>
-        <div className={`${availableStatus[getValue() as keyof typeof availableStatus].color} text-black px-2 rounded-lg`}>
-            {availableStatus[row.getValue("status") as keyof typeof availableStatus].text}
+        <div className={`${getValue().foreground} text-black px-2 rounded-lg`}>
+            {getValue().name}
         </div>
         </div>
         }
