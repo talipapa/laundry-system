@@ -88,6 +88,9 @@ Route::middleware(['auth', 'verified'])->group(function (){
         }  
         return Inertia::render('Customer/Dashboard');
     })->name('dashboard');
+
+    Route::get('/testAppend', [ReservationQueueController::class, 'appendRow'])->name('testAppend');
+
 });
 
 Route::middleware('auth')->group(function () {

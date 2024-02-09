@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Selections\UserLevel;
+use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,8 +49,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'user_id');
+    }
+
+    // In laravel naming convention a camel case is automatically converted to snake case
+
+    // This means $user->isAdmin will be converted to $user->is_admin
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->role !== UserLevel::CUSTOMER->value;
     }
 }

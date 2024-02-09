@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MakeTransactionEvent;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Selections\TransactionStatus;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,7 +14,7 @@ class ReservationQueueController extends Controller
 {
     //
     public function index(){
-        $currentOrders = Transaction::whereNot('status', TransactionStatus::COMPLETE->value)->get();
+        $currentOrders = Transaction::orderBy('updated_at', 'desc')->whereNot('status', TransactionStatus::COMPLETE->value)->get();
         $payload = [
             'currentOrders' => $currentOrders
         ];
@@ -34,4 +37,5 @@ class ReservationQueueController extends Controller
 
         return redirect()->back()->with('success', 'Transaction status updated!');
     }
+
 }

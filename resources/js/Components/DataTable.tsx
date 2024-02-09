@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     ColumnDef,
     SortingState,
@@ -32,7 +32,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { router } from '@inertiajs/react'
 import { useToast } from '@/shadcn/ui/use-toast'
 import { Toaster } from '@/shadcn/ui/toaster'
-import { AnimatePresence } from "framer-motion"
+import {
+  CSSTransition,
+  TransitionGroup,
+} from 'react-transition-group';
 
 interface DataTableProps<TData, TValue> {
 columns: ColumnDef<TData, TValue>[]
@@ -53,10 +56,8 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
 
     useEffect(() => {
       setTempData(data)
-
     }, [data])
 
-    
 
     const [filtering, setFiltering] = React.useState<any>('')
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(customColumnVisiblity)
@@ -159,6 +160,12 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
     })
 
 
+    const [inProp, setInProp] = useState(false)
+
+    const nodeRef = useRef(null)
+
+
+
   
 
     return (
@@ -220,7 +227,6 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
             </div>
           </div>
           
-          <AnimatePresence>
             <Table className='bg-[#ffffff] dark:bg-[#2e2c2c] shadow-xl'>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -240,36 +246,40 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody >                
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row, index) => (
-                    <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} className='px-6'>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>                                                                                   
-                      ))}
+              <TableBody>
+                <TransitionGroup component={null}>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row, index) => (
+                      <CSSTransition key={index} nodeRef={nodeRef} timeout={1000} classNames="rowItems">
+                        <TableRow 
+                        ref={nodeRef}
+                        key={row.id}
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id} className='px-6'>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext()
+                              )}
+                            </TableCell>                                                                                   
+                          ))}
+                        </TableRow>
+                      </CSSTransition>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        No results.
+                      </TableCell>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
+                  )}
+                </TransitionGroup>
+
               </TableBody>
             </Table>
-          </AnimatePresence>
           <div className="flex items-center space-x-2 py-4">
             <div className="flex-1 text-sm text-muted-foreground">
               {table.getFilteredSelectedRowModel().rows.length} of{" "}

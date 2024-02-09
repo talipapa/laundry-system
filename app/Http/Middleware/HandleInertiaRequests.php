@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'token' => csrf_token(),
             ],
             'webInfo' => [
                 'websiteName' => ($websiteDetails?->name == null) ? env('APP_NAME') : $websiteDetails->name,

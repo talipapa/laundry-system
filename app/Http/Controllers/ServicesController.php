@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MakeTransactionEvent;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -66,6 +67,20 @@ class ServicesController extends Controller
             event(new Registered($user));
             Auth::login($user);
             $transaction->save();
+
+            broadcast(new MakeTransactionEvent(
+                "admin",
+                $transaction->id,
+                $user->id,
+                false,
+                $transaction->total_price,
+                ['foreground' => "text-blue-400", 'name' => "washing"],
+                $transaction->service_type,
+                $transaction->addons,
+                $transaction->created_at,
+                $transaction->updated_at,
+            ))->toOthers();
+
         } catch (\Throwable $th) {
             if($user_id != null){
                 $user = User::find($user_id);
