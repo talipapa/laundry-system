@@ -20,12 +20,10 @@ createInertiaApp({
         
         
         root.render(
-            <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-                <ParallaxProvider>
-                    <App {...props} />
-                </ParallaxProvider>
+            <ParallaxProvider>
+                <App {...props} />
+            </ParallaxProvider>
 
-            </ThemeProvider>
         );
         delete el.dataset.page;
     },

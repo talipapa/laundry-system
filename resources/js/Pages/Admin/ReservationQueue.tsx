@@ -36,6 +36,30 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
+    accessorKey: "reserved_at",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Reserved At
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )},
+    cell: ({ row }) => {
+      return <div className='flex flex-col items-start'>
+        <div>
+          {format(row.getValue("reserved_at"), 'MMM dd yyyy')}
+        </div>
+        <div className='bg-green-400 dark:bg-green-900  rounded-sm px-1'>
+          {format(row.getValue("reserved_at"), 'EEEE')}
+        </div> 
+      </div>
+    },
+  },
+  {
     accessorKey: "total_price",
     header: ({column}) => {
       return (

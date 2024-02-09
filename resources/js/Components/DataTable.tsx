@@ -160,26 +160,25 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
     })
 
 
-    const [inProp, setInProp] = useState(false)
-
-    const nodeRef = useRef(null)
-
-
-
-  
-
     return (
       
         <div className="w-full">
 
           <div className="flex items-center justify-between py-4 ">
-            <Input
-              placeholder="Search..."
-              value={filtering}
-              onChange={(event) => setFiltering(event.target.value)
+            <div className='flex flex-row items-center space-x-3 w-full'>
+              <Input
+                placeholder="Search..."
+                value={filtering}
+                onChange={(event) => setFiltering(event.target.value)
+                }
+                className="max-w-sm shadow-sm bg-[#ffffff] dark:bg-[#0C0A09] "
+              />
+              {
+                filtering !== '' ? (
+                  <span className='text-muted-foreground'>{`${table.getFilteredRowModel().rows.length < 4 ? `${table.getFilteredRowModel().rows.length} result`: `${table.getFilteredRowModel().rows.length} results`}`}</span>
+                ) : ''
               }
-              className="max-w-sm shadow-sm bg-[#ffffff] dark:bg-[#0C0A09] "
-            />
+            </div>
             <div className='flex flex-row items-center space-x-3 '>
               <Select
                 value={`${table.getState().pagination.pageSize}`}
@@ -247,43 +246,40 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
                 ))}
               </TableHeader>
               <TableBody>
-                <TransitionGroup component={null}>
-                  {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row, index) => (
-                      <CSSTransition key={index} nodeRef={nodeRef} timeout={1000} classNames="rowItems">
-                        <TableRow 
-                        ref={nodeRef}
-                        key={row.id}
-                        >
-                          {row.getVisibleCells().map((cell) => (
-                            <TableCell key={cell.id} className='px-6'>
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </TableCell>                                                                                   
-                          ))}
-                        </TableRow>
-                      </CSSTransition>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={columns.length}
-                        className="h-24 text-center"
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, index) => (
+                      <TableRow 
+                      key={row.id}
                       >
-                        No results.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TransitionGroup>
-
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id} className='px-6'>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>                                                                                   
+                        ))}
+                      </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           <div className="flex items-center space-x-2 py-4">
+            
             <div className="flex-1 text-sm text-muted-foreground">
               {table.getFilteredSelectedRowModel().rows.length} of{" "}
               {table.getFilteredRowModel().rows.length} row(s) selected.
+
+              <span>lol</span>
             </div>
             <div className="space-x-2">
               <Button

@@ -15,6 +15,7 @@ export interface Order {
     addons: Array<string>;
     status: string;
     service_type: string;
+    reserved_at: string;
     total_price: number;
     created_at: string;
     updated_at: string;

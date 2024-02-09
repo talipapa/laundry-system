@@ -11,7 +11,8 @@ class TransactionController extends Controller
 {
     //
     public function index(){
-        $allTransactions = Transaction::all();
+        $allTransactions = Transaction::orderBy('updated_at', 'desc')->get();
+
         $payload = [
             'transactions' => $allTransactions
         ];  
