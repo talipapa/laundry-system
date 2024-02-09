@@ -101,6 +101,7 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
             id: userId,
             role: value
           }
+          
           router.put(route('admin.customer.role'), payload, {
             preserveState: true,
             onSuccess: () => {
@@ -114,10 +115,7 @@ const DataTable = <Tdata, TValue>({columns, data, customColumnVisiblity}: DataTa
                   }
                   : row
                 )
-              ) 
-
-       
-              
+              )
     
             },
             onError: (e) => {
