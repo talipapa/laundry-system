@@ -15,3 +15,12 @@ export const BookingSchema = yup.object().shape({
     reserveOn: yup.string().required('This field is required'),
 })
 
+export const SessionedBookingSchema = yup.object().shape({
+    serviceType: yup.array().required('This field is required'),
+    addOns: yup.array().of(yup.object().shape({
+        name: yup.string(),
+        price: yup.number()
+    })),
+    reserveOn: yup.string().required('This field is required'),
+})
+

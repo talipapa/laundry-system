@@ -217,17 +217,12 @@ const ReservationQueue = ({auth, currentOrders}: any) => {
   const [isChecked, setIsChecked] = React.useState(false)
   const [data, setData] = React.useState(currentOrders)
 
-
-
-
   useEffect(() => {
-
     const channel = window.Echo.private(`transaction.admin`);
     channel.listen('.live-reservation', (e: any) => {
       console.log(e)
       setData((prevData: any) => [e, ...prevData])
-    })
-  
+    })  
   }, [])
 
 

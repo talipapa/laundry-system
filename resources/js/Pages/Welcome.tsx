@@ -28,7 +28,7 @@ export default function Welcome({ auth, webInfo, geoLocation, laravelVersion, ph
         <GuestPageLayout>
             <Head title="Welcome" />
             {/* Header container */}
-            <GuestNavbar webInfo={webInfo}/>
+            <GuestNavbar webInfo={webInfo} auth={auth}/>
 
             {/* Hero container */}
             <div className='h-[100vh] max-h-[400px] w-full overflow-hidden z-[-5]'>

@@ -1,5 +1,4 @@
 import { applicationName } from '@/Helpers/GlobalDefinition'
-import React from 'react'
 import { MdOutlineLocalLaundryService } from "react-icons/md";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { IoPeopleOutline } from "react-icons/io5";
@@ -14,7 +13,7 @@ import { GrUserAdmin } from "react-icons/gr";
 
 
 
-const AdminNavbar = ({navBarHeight, auth}: any) => {
+const CustomerNavbar = ({navBarHeight}: any) => {
 
   const logoutFunc = () => {
     router.post(route('logout'))
@@ -36,39 +35,10 @@ const AdminNavbar = ({navBarHeight, auth}: any) => {
           <MdOutlineSpaceDashboard className='text-2xl text-[#4cc9f0]'/>
           <span className='text-[#ffffffc2]'>Dashboard</span>
         </NavLink>
-
-        <NavLink 
-        href={route('admin.reservation-queue')} 
-        className={`hover:bg-[#ffffff1f] select-none px-3 py-3 rounded-sm flex flex-row items-center space-x-2 ${route().current('admin.reservation-queue') ? "bg-[#ffffff41]" : null}`}>
-          <MdOutlineMiscellaneousServices className='text-2xl text-[#4cc9f0]'/>
-          <span className='text-[#ffffffc2]'>Reservation Queue</span>
-        </NavLink>
-
-
-        <NavLink href={route('admin.customer')} className={`hover:bg-[#ffffff1f] select-none px-3 py-3 rounded-sm flex flex-row items-center space-x-2 ${route().current('admin.customer') ? "bg-[#ffffff41]" : null}`}>
-          <IoPeopleOutline className='text-2xl text-[#4cc9f0]'/>
-          <span className='text-[#ffffffc2]'>Customers</span>
-        </NavLink>
-
-
-        <NavLink 
-        href={route('admin.transaction')} 
-        className={`hover:bg-[#ffffff1f] select-none px-3 py-3 rounded-sm flex flex-row items-center space-x-2 ${route().current('admin.transaction') ? 'bg-[#ffffff41]' : null}`}>
-          <LuNewspaper className='text-2xl text-[#4cc9f0]'/>
-          <span className='text-[#ffffffc2]'>Transactions</span>
-        </NavLink>
-        
       </div>
 
       <div className='p-6'>
         <div className='p-2 border-t-2 border-slate-600 text-[#ffffffaf] flex flex-col space-y-2'>
-
-          {auth.user?.role !== 'staff' ? (
-            <NavLink href={route('admin.web-settings')} className={`hover:bg-[#ffffff1f] select-none px-3 py-2 rounded-sm flex flex-row items-center space-x-2 ${route().current('admin.web-settings') ? "bg-[#ffffff41]" : null}`}>
-              <GrUserAdmin className='text-2xl text-[#4ccaf088]'/>
-              <span className='text-[#ffffffc2]'>Web settings</span>
-            </NavLink>
-          ) :  ""}
 
           <NavLink href={route('admin.account-settings')} className={`hover:bg-[#ffffff1f] select-none px-3 py-2 rounded-sm flex flex-row items-center space-x-2 ${route().current('admin.account-settings') ? "bg-[#ffffff41]" : null}`}>
             <PiNut className='text-2xl text-[#4ccaf088]'/>
@@ -86,4 +56,4 @@ const AdminNavbar = ({navBarHeight, auth}: any) => {
   )
 }
 
-export default AdminNavbar
+export default CustomerNavbar

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CustomerTrackReservationStatusEvent;
 use App\Events\MakeTransactionEvent;
 use App\Models\Transaction;
 use App\Models\User;
@@ -32,8 +33,12 @@ class ReservationQueueController extends Controller
         if (!$transaction){
             return redirect()->back()->with('error', 'Transaction not found!');
         }
+
+        $oldStatus = $transaction->status;
+
         $transaction->status = $request->status;
         $transaction->save();
+        broadcast(new CustomerTrackReservationStatusEvent($transaction->user_id, $oldStatus, $transaction->status))->toOthers();
 
         return redirect()->back()->with('success', 'Transaction status updated!');
     }

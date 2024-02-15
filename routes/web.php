@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActiveReservationController;
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\AdminSetupController;
 use App\Http\Controllers\MessageBroadcastController;
@@ -86,10 +87,11 @@ Route::middleware(['auth', 'verified'])->group(function (){
         if (in_array(auth()->user()->role, $array)){
             return redirect()->route('admin.dashboard');
         }  
-        return Inertia::render('Customer/Dashboard');
+        return redirect('/');
     })->name('dashboard');
 
-    Route::get('/testAppend', [ReservationQueueController::class, 'appendRow'])->name('testAppend');
+    Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
+    
 
 });
 

@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'currentTransaction' => $request->user()?->transactions?->where('status', '!=', 'completed')->first(),
             ],
             'webInfo' => [
                 'websiteName' => ($websiteDetails?->name == null) ? env('APP_NAME') : $websiteDetails->name,

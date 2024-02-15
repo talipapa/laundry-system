@@ -2,78 +2,70 @@ import CanvasRestriction from '@/Components/CanvasRestriction'
 import GuestFootbar from '@/Components/CustomerPartials/GuestFootbar'
 import GuestNavbar from '@/Components/CustomerPartials/GuestNavbar'
 import GuestPageLayout from '@/Components/CustomerPartials/GuestPageLayout'
-import { InputTextField } from '@/Components/InputCustomFields'
 import { availableDay } from '@/Helpers/AvailableDay'
-import { BookingSchema } from '@/Schema/GuestServicesBooking'
-import { Head, router, useForm } from '@inertiajs/react'
+import { SessionedBookingSchema } from '@/Schema/GuestServicesBooking'
+import { Head, router } from '@inertiajs/react'
 import { format } from 'date-fns'
-import { Field, useFormik, useFormikContext } from 'formik'
+import { useFormik } from 'formik'
 import React, { useState } from 'react'
 
 type Props = {}
 
-const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
+const SessionedServicesPage = ({webInfo, auth, geoLocation}: any) => {
+    const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
+    const {values, errors, touched, handleSubmit, handleBlur, handleChange, setValues, setFieldValue, setFieldTouched, setErrors, isValid} = useFormik({
+      initialValues: {
+        serviceType: '',
+        addOns: [],
+        reserveOn: '',
+      },
+      validationSchema: SessionedBookingSchema,
+      onSubmit: (values) => {
+        router.post(route('services.booking'), values, {
+          onBefore: () => {
+            setIsDisabledButton(true)
+          },
+          onError: (e) => {
+            setErrors(e)
+          },
+          onFinish: () => {
+            setIsDisabledButton(false)
+          }
+        })
+      }
+    })
+    const calculateTotalPrice = () => {
+      let total = 0;
+      if (values.serviceType !== '') {
+        total += values.serviceType[2] as unknown as number
+      }
+      if (values.addOns.length > 0) {
+        values.addOns.map((addon: any) => {
+          total += parseInt(addon['price'])
+        })
+      }
+      return total
+    }
   
-  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
-  const {values, errors, touched, handleSubmit, handleBlur, handleChange, setValues, setFieldValue, setFieldTouched, setErrors, isValid} = useFormik({
-    initialValues: {
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      serviceType: '',
-      addOns: [],
-      reserveOn: '',
-    },
-    validationSchema: BookingSchema,
-    onSubmit: (values) => {
-      router.post(route('services.booking'), values, {
-        onBefore: () => {
-          setIsDisabledButton(true)
-        },
-        onError: (e) => {
-          setErrors(e)
-        },
-        onFinish: () => {
-          setIsDisabledButton(false)
-        }
-      })
+    const handleRadioButtonsForServiceType = (serviceType: any) => {
+      setFieldValue('serviceType', serviceType)
     }
-  })
-  const calculateTotalPrice = () => {
-    let total = 0;
-    if (values.serviceType !== '') {
-      total += values.serviceType[2] as unknown as number
+    const handleRadioButtonsForReserveOn = (serviceType: any) => {
+      setFieldValue('reserveOn', serviceType)
     }
-    if (values.addOns.length > 0) {
-      values.addOns.map((addon: any) => {
-        total += parseInt(addon['price'])
-      })
-    }
-    return total
-  }
-
-  const handleRadioButtonsForServiceType = (serviceType: any) => {
-    setFieldValue('serviceType', serviceType)
-  }
-  const handleRadioButtonsForReserveOn = (serviceType: any) => {
-    setFieldValue('reserveOn', serviceType)
-  }
-
-  const handleAddonChange = (e: any) => {
-    const { checked, name, value } = e.target;
-    if (checked) {
-      setFieldValue("addOns", [...values.addOns, {'name': name, 'price': value}]);
-    } else {
-      setFieldValue(
-        "addOns",
-        values.addOns.filter((v) => v['name'] !== name)
-      );
-    }
-  };
-
-
+  
+    const handleAddonChange = (e: any) => {
+      const { checked, name, value } = e.target;
+      if (checked) {
+        setFieldValue("addOns", [...values.addOns, {'name': name, 'price': value}]);
+      } else {
+        setFieldValue(
+          "addOns",
+          values.addOns.filter((v) => v['name'] !== name)
+        );
+      }
+    };
+    
   return (
     <GuestPageLayout>
       
@@ -120,73 +112,8 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
               <span className="text-xl font-semibold">Total price</span>
               <span className="text-3xl font-semibold">{`₱ ${calculateTotalPrice()}`}</span>
             </div>
-
-            
           </div>
           <form onSubmit={handleSubmit} className='col-span-2 flex flex-col space-y-6 items-end'>
-
-            
-            <div className='bg-white w-full rounded-lg shadow-lg p-4'>
-              <span className="text-xl font-bold ">Create your account</span>
-              <div className='flex flex-row space-x-3 w-full mt-3'>
-                <InputTextField 
-                  labelName="First name"
-                  formikFieldName="first_name"
-                  propError={errors.first_name}
-                  propTouched={touched.first_name}
-                  values={values.first_name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="flex flex-col space-y-1 w-full"
-                />
-                <InputTextField 
-                  labelName="Last name"
-                  formikFieldName="last_name"
-                  propError={errors.last_name}
-                  propTouched={touched.last_name}
-                  values={values.last_name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="flex flex-col space-y-1 w-full"
-                />
-              </div>
-              <div className='flex flex-row space-x-3 w-full mt-3'>
-                <InputTextField 
-                  labelName="Email address"
-                  formikFieldName="email"
-                  propError={errors.email}
-                  propTouched={touched.email}
-                  values={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="flex flex-col space-y-1 w-full"
-                />
-              </div>
-              <div className='flex flex-row space-x-3 w-full mt-3'>
-                <InputTextField 
-                  labelName="Password"
-                  formikFieldName="password"
-                  propError={errors.password}
-                  propTouched={touched.password}
-                  values={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="flex flex-col space-y-1 w-full"
-                  type="password"
-                />
-                <InputTextField 
-                  labelName="Confirm password"
-                  formikFieldName="confirmPassword"
-                  propError={errors.confirmPassword}
-                  propTouched={touched.confirmPassword}
-                  values={values.confirmPassword}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="flex flex-col space-y-1 w-full"
-                  type="password"
-                />
-              </div>
-            </div>
             <div className='w-full'>
               <span className={`text-md ${errors.serviceType ? 'text-red-500' : ''}`}>{errors.serviceType}</span>
               <div className={`w-full rounded-lg shadow-lg p-4  bg-white border-2 ${errors.serviceType ? 'border-red-400' : 'border-white'}`}>
@@ -298,4 +225,4 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
   )
 }
 
-export default ServicesPage
+export default SessionedServicesPage

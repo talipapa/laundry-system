@@ -25,8 +25,10 @@ class MakeTransactionEvent implements ShouldBroadcast
     public $created_at;
     public $updated_at;
 
+    public $reserved_at;
 
-    public function __construct($is_admin, $id, $user_id, $is_reviewed, $total_price, $status, $service_type, $addons, $created_at, $updated_at)
+
+    public function __construct($is_admin, $id, $user_id, $is_reviewed, $total_price, $status, $service_type, $addons, $created_at, $updated_at, $reserved_at)
     {
         $this->is_admin = $is_admin;
         $this->id = $id;
@@ -38,6 +40,7 @@ class MakeTransactionEvent implements ShouldBroadcast
         $this->addons = $addons;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
+        $this->reserved_at = $reserved_at;
     }
 
     public function broadcastOn()
@@ -61,6 +64,7 @@ class MakeTransactionEvent implements ShouldBroadcast
             'addons' => $this->addons,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'reserved_at' => $this->reserved_at,
         ];
     }
 }

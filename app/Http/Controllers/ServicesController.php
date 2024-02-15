@@ -17,10 +17,71 @@ use Inertia\Inertia;
 class ServicesController extends Controller
 {
     public function index(){
+
+        if (Auth::check()) {
+            return Inertia::render('Customer/SessionedServicesPage');
+        }
+
         return Inertia::render('Customer/ServicesPage');
     }
 
     public function guestCreateBooking(Request $request){
+
+        if (Auth::check()){
+            $user_id = null;
+            $transaction_id = null;
+    
+            $totalPrice = 0;
+            $totalPrice += $request->serviceType[2];
+            foreach ($request->addOns as $addon) {
+                $totalPrice += $addon['price'];
+            }
+    
+            $addOns = [];
+    
+            try {
+                foreach ($request->addOns as $addon) {
+                    array_push($addOns, $addon['name']);
+                }
+                $transaction = Transaction::create([
+                    'user_id' => Auth::id(),
+                    'service_type' => $request->serviceType[1],
+                    'total_price' => $request->serviceType[2],
+                    'reserved_at' => Carbon::parse($request->reserveOn)->timezone('Asia/Manila')->format('Y-m-d'),
+                    'addons' => $addOns,
+                    'is_reviewed' => false,
+                ]);
+                $transaction_id = $transaction->id;
+                $transaction->save();
+    
+                broadcast(new MakeTransactionEvent(
+                    "admin",
+                    $transaction->id,
+                    Auth::id(),
+                    false,
+                    $transaction->total_price,
+                    ['foreground' => "text-yellow-400", 'name' => "waiting"],
+                    $transaction->service_type,
+                    $transaction->addons,
+                    $transaction->created_at,
+                    $transaction->updated_at,
+                    $transaction->reserved_at
+                ))->toOthers();
+                return to_route('customer.reservation');
+            } catch (\Throwable $th) {
+                if($user_id != null){
+                    $user = User::find($user_id);
+                    $user->delete();
+                }
+                if($transaction_id != null){
+                    $transaction = Transaction::find($transaction_id);
+                    $transaction->delete();
+                }
+                return back()->with('error', 'An error occured while processing your request. Please try again later.');
+            }
+
+
+        }
 
 
         $user_id = null;
@@ -74,11 +135,12 @@ class ServicesController extends Controller
                 $user->id,
                 false,
                 $transaction->total_price,
-                ['foreground' => "text-blue-400", 'name' => "washing"],
+                ['foreground' => "text-yellow-400", 'name' => "waiting"],
                 $transaction->service_type,
                 $transaction->addons,
                 $transaction->created_at,
                 $transaction->updated_at,
+                $transaction->reserved_at
             ))->toOthers();
 
         } catch (\Throwable $th) {
@@ -92,8 +154,6 @@ class ServicesController extends Controller
             }
             return back()->with('error', 'An error occured while processing your request. Please try again later.');
         }
-
-
         return redirect(RouteServiceProvider::HOME);
     }
 }

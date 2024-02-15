@@ -28,3 +28,7 @@ Broadcast::channel('transaction.{admin}', function ($user, $admin) {
     }
 
 });
+
+Broadcast::channel('customerStatus.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});

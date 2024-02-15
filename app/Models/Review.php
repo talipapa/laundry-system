@@ -33,6 +33,11 @@ class Review extends Model
     protected function getFullNameAttribute()
     {
         $user = User::find($this->user_id);
+
+        if (!$user) {
+            return 'NULL';
+        }
+
         return ($user->first_name. ' '. $user->last_name);
         
     }

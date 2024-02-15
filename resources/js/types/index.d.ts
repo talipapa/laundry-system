@@ -12,7 +12,7 @@ export interface Order {
     id: number;
     user_id: number;
     is_reviewed: number | boolean;
-    addons: Array<string>;
+    addons: Array<string> | string | any;
     status: string;
     service_type: string;
     reserved_at: string;
@@ -25,7 +25,6 @@ export interface Review {
     reviewAverage: number,
     reviewCount: number, 
 }
-
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
@@ -42,5 +41,6 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         longitude: any,
         latitude: any
     }
-    
+    currentUserReservation: Order;
+    pastUserReservation: Order[];
 };
