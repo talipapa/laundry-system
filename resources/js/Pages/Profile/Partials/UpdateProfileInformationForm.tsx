@@ -17,7 +17,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         initialValues: {
             first_name: user?.first_name ?? '',
             last_name: user?.last_name ?? '',
-            email: user?.email ?? ''
+            email: user?.email ?? '',
+            address: user?.address ?? ''
         },
         validationSchema: ProfileInformationSchema,
         onSubmit: (values) => {
@@ -28,7 +29,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 },
                 onSuccess: () => {
                     setIsDisabledButton(false)
-                    toast({title: status, variant: 'success'})
+                    toast({title: 'Profile Updated', variant: 'success'})
                 },
                 onError: () => {
                     setIsDisabledButton(false)
@@ -77,6 +78,16 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     propError={errors.email}
                     propTouched={touched.email}
                     values={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className="flex flex-col space-y-1 w-full dark:text-white"
+                />
+                <InputTextField 
+                    labelName="Address"
+                    formikFieldName="address"
+                    propError={errors.address}
+                    propTouched={touched.address}
+                    values={values.address}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="flex flex-col space-y-1 w-full dark:text-white"

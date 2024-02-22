@@ -15,17 +15,15 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
 
-type Props = {}
-
 const GuestNavbar = ({webInfo, auth}: any) => {
   return (
         <div className='sticky top-0 z-[100]'>
             {/* Notification navbar */}
-            <div className={`w-full h-[60px] bg-[rgb(249,132,74)]`}>
+            {/* <div className={`w-full h-[60px] bg-[rgb(249,132,74)]`}>
                 <CanvasRestriction className="flex flex-col items-center justify-center">
                     <span className='font-semibold text-xl select-none'>FIRST OPENING 60% OFF 🎉🎉🎉</span>
                 </CanvasRestriction>
-            </div>
+            </div> */}
 
             {/* Navbar */}
             <div className={`w-full h-[90px] bg-[#131313]`}>
@@ -71,18 +69,32 @@ const GuestNavbar = ({webInfo, auth}: any) => {
                                                 <div className='text-md font-semibold mb-2'>
                                                     Welcome back <span className='text-[#F9844A] capitalize'>{`${auth.user['first_name']} ${auth.user['last_name']}`}</span>
                                                 </div>
-                                                <Link href={route('dashboard')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
-                                                    <MdOutlineManageAccounts className='text-[30px]'/>
-                                                    <span>
-                                                        Account
-                                                    </span>
-                                                </Link>
-                                                <Link href={route('dashboard')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
-                                                    <IoNewspaperOutline  className='text-[30px]'/>
-                                                    <span>
-                                                        Transactions
-                                                    </span>
-                                                </Link>
+                                                {auth.user?.role !== 'customer' ? (
+                                                    <>
+                                                        <Link href={route('dashboard')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
+                                                            <IoNewspaperOutline  className='text-[30px]'/>
+                                                            <span>
+                                                                Admin dashboard
+                                                            </span>
+                                                        </Link>    
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Link href={route('customer.account')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
+                                                            <MdOutlineManageAccounts className='text-[30px]'/>
+                                                            <span>
+                                                                Account
+                                                            </span>
+                                                        </Link>
+                                                        <Link href={route('dashboard')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
+                                                            <IoNewspaperOutline  className='text-[30px]'/>
+                                                            <span>
+                                                                Transactions
+                                                            </span>
+                                                        </Link>
+                                                    </>
+                                                )}
+
                                             </div>
                                         </div>
                                         <Separator/>

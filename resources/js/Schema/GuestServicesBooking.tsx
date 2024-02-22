@@ -12,6 +12,7 @@ export const BookingSchema = yup.object().shape({
         name: yup.string(),
         price: yup.number()
     })),
+    address: yup.string().min(10, 'Invalid address, please be more specific').required("This field is required"),
     reserveOn: yup.string().required('This field is required'),
 })
 
@@ -21,6 +22,7 @@ export const SessionedBookingSchema = yup.object().shape({
         name: yup.string(),
         price: yup.number()
     })),
+    address: yup.string().required('This field is required'),
     reserveOn: yup.string().required('This field is required'),
 })
 

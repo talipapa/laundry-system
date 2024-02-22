@@ -48,16 +48,18 @@ const AdminCustomerActions = ({row}: any) => {
       id: row.original.id,
       first_name: row.original.first_name,
       last_name: row.original.last_name,
-      email: row.original.email
+      email: row.original.email,
+      address: row.original?.address ?? ''
     })
-
+    
     const updateUser = (e: any) => {
       e.preventDefault()
       const payload = {
         id: row.original.id,
         first_name: e.target.first_name.value,
         last_name: e.target.last_name.value,
-        email: e.target.email.value
+        email: e.target.email.value,
+        address: e.target.address.value
       }
       router.put(route('admin.customer.update'), payload, {
         onSuccess: () => {
@@ -162,6 +164,12 @@ const AdminCustomerActions = ({row}: any) => {
                   Last name
                 </Label>
                 <Input id="last_name" value={user.last_name} onChange={(e) => setUser((data: any) => ({...data, last_name: e.target.value}))} className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="address" className="text-right">
+                  Address
+                </Label>
+                <Input id="address" value={user.address} onChange={(e) => setUser((data: any) => ({...data, address: e.target.value}))} className="col-span-3" />
               </div>
             </div>
             <DialogFooter>

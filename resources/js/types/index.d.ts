@@ -6,6 +6,7 @@ export interface User {
     created_at: string;
     updated_at: string;
     email_verified_at: string;
+    address: string;
 }
 
 export interface Order {
@@ -19,6 +20,7 @@ export interface Order {
     total_price: number;
     created_at: string;
     updated_at: string;
+    address: string;
 }
 
 export interface Review {

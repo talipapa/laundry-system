@@ -49,6 +49,7 @@ class ServicesController extends Controller
                     'total_price' => $request->serviceType[2],
                     'reserved_at' => Carbon::parse($request->reserveOn)->timezone('Asia/Manila')->format('Y-m-d'),
                     'addons' => $addOns,
+                    'address' => $request->address,
                     'is_reviewed' => false,
                 ]);
                 $transaction_id = $transaction->id;
@@ -65,7 +66,8 @@ class ServicesController extends Controller
                     $transaction->addons,
                     $transaction->created_at,
                     $transaction->updated_at,
-                    $transaction->reserved_at
+                    $transaction->reserved_at,
+                    $transaction->address
                 ))->toOthers();
                 return to_route('customer.reservation');
             } catch (\Throwable $th) {
@@ -103,6 +105,7 @@ class ServicesController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'address' => 'string',
             'password' => ['required', Rules\Password::defaults()],
         ]);
         
@@ -111,6 +114,7 @@ class ServicesController extends Controller
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
+                'address' => $request->address,
                 'password' => Hash::make($request->password),
             ]);
             $user_id = $user->id;
@@ -120,6 +124,7 @@ class ServicesController extends Controller
                 'service_type' => $request->serviceType[1],
                 'total_price' => $totalPrice,
                 'reserved_at' => Carbon::parse($request->reserveOn)->timezone('Asia/Manila')->format('Y-m-d'),
+                'address' => $request->address,
                 'addons' => $addOns,
                 'is_reviewed' => false,
             ]);
@@ -140,7 +145,8 @@ class ServicesController extends Controller
                 $transaction->addons,
                 $transaction->created_at,
                 $transaction->updated_at,
-                $transaction->reserved_at
+                $transaction->reserved_at,
+                $transaction->address
             ))->toOthers();
 
         } catch (\Throwable $th) {

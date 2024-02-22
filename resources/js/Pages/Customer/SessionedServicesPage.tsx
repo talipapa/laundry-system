@@ -4,6 +4,7 @@ import GuestNavbar from '@/Components/CustomerPartials/GuestNavbar'
 import GuestPageLayout from '@/Components/CustomerPartials/GuestPageLayout'
 import { availableDay } from '@/Helpers/AvailableDay'
 import { SessionedBookingSchema } from '@/Schema/GuestServicesBooking'
+import { Input } from '@/shadcn/ui/input'
 import { Head, router } from '@inertiajs/react'
 import { format } from 'date-fns'
 import { useFormik } from 'formik'
@@ -18,6 +19,7 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation}: any) => {
         serviceType: '',
         addOns: [],
         reserveOn: '',
+        address: auth.user?.address !== null ? `${auth.user?.address}` : '',
       },
       validationSchema: SessionedBookingSchema,
       onSubmit: (values) => {
@@ -74,7 +76,7 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation}: any) => {
       {/* Main content container */}
       <div className='min-h-[900px] bg-[#EEEEEE]'>
         <CanvasRestriction className="grid lg:grid-cols-3  gap-14 py-12 items-start">
-          <div className='flex flex-col space-y-6 col-span-2 lg:col-span-1 lg:sticky lg:top-[180px]'>
+          <div className='flex flex-col space-y-6 col-span-2 lg:col-span-1 lg:sticky lg:top-[100px]'>
             <div className='bg-white w-full rounded-lg shadow-lg p-4 flex flex-col'>
               <span className="text-xl font-bold mb-2">Your booking details</span>
               <div className='grid grid-cols-2 items-start  sticky top-0 h-full gap-y-3'>
@@ -114,6 +116,25 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation}: any) => {
             </div>
           </div>
           <form onSubmit={handleSubmit} className='col-span-2 flex flex-col space-y-6 items-end'>
+            <div className='bg-white w-full rounded-lg shadow-lg p-4'>
+              <div className="flex flex-col space-y-1 w-full">
+                <label htmlFor="address" className="form-label text-xl font-semibold">
+                  Address
+                </label>
+                <div className="flex flex-col md:flex-col md:space-y-1 ">
+                  <Input
+                    type="text"
+                    value={values.address}
+                    id="address"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.address && touched.address ? (
+                    <div className="text-red-500 mt-2">{errors.address}</div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
             <div className='w-full'>
               <span className={`text-md ${errors.serviceType ? 'text-red-500' : ''}`}>{errors.serviceType}</span>
               <div className={`w-full rounded-lg shadow-lg p-4  bg-white border-2 ${errors.serviceType ? 'border-red-400' : 'border-white'}`}>

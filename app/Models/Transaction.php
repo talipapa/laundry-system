@@ -19,6 +19,7 @@ class Transaction extends Model
         'is_reviewed',
         'reserved_at',
         'addons',
+        'address',
         'total_price',
         'service_type'
     ];

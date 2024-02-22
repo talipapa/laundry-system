@@ -38,9 +38,13 @@ class ReservationQueueController extends Controller
 
         $transaction->status = $request->status;
         $transaction->save();
-        broadcast(new CustomerTrackReservationStatusEvent($transaction->user_id, $oldStatus, $transaction->status))->toOthers();
+        try {
+            broadcast(new CustomerTrackReservationStatusEvent($transaction->user_id, $oldStatus, $transaction->status))->toOthers();
+            return redirect()->back()->with('success', 'Transaction status updated!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('success', 'Transaction status updated!');
+        }
 
-        return redirect()->back()->with('success', 'Transaction status updated!');
     }
 
 }

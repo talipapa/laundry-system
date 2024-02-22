@@ -202,7 +202,7 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
   const customColumnVisiblity = {
     'created_at': false,
   }
-  const [currentReservationStatus, setCurrentReservationStatus] = useState<string>(currentUserReservation['status'])
+  const [currentReservationStatus, setCurrentReservationStatus] = useState<string>(currentUserReservation?.status ? currentUserReservation?.status : 'inactive')
   const stepStyleConfig = {
     activeBgColor: '#fb5607',
     activeTextColor: 'white',
@@ -238,93 +238,98 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
       setCurrentReservationStatus(e.status['name'])
     })  
   }, [])
-
   
-  return (
-    <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation}>
-
+  if (currentReservationStatus === 'inactive'){
+    return (
+      <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation}>
       <div className='flex flex-col space-y-10'>
-        {currentReservationStatus !== 'complete' || !isSameDay(parse(currentUserReservation['reserved_at'], 'yyyy-MM-dd HH:mm:ss', new Date()), new Date()) ? (
-          
-          <div>
-            <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><MdOutlineNotificationsActive className='text-2xl'/> <span>Active Reservation</span></h1>
-            <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
-              
-              <div className='w-full flex flex-row items-end justify-between'>
-                <span>
-                  {`# ${currentUserReservation['id']}`}
-                </span>
-                <div className='flex flex-row space-x-2'>
-                  <span className='font-semibold uppercase'>{`${currentReservationStatus}`}</span>
-                  <span>|</span>
-                  <span className='font-semibold '>
-                    {currentUserReservation['service_type']}
-                  </span>
-                </div>
-              </div>
-              <Separator />
-
-
-              <div className='h-32'>
-              <Stepper activeStep={identifyReservationStatus(currentReservationStatus)} styleConfig={stepStyleConfig}>
-                <Step label="Waiting" />
-                <Step label="Washing" />
-                <Step label="Pickup" />
-                <Step label="Completed" />
-              </Stepper>
-
-              </div>
-
-
-              <span className='text-slate-800/80 font-medium tracking-wider mb-1'>Details</span>
-              <div className='flex flex-col space-y-2'>
-                <span className='flex flex-row space-x-2 border-l-4 pl-2 border-[#F9844A]'>
-                    {`Reserved At: ${format(currentUserReservation['reserved_at'], "EEEE | MMMM dd, yyyy",)}`}
-                </span>
-                <div className='flex flex-row space-x-2 border-l-4 pl-2 border-[#F9844A]'>
-                  <span>Addons: </span>
-                  {JSON.parse(currentUserReservation['addons']).map((addon: any, index: number) => (
-                  
-                    <span key={index} className='capitalize'>{`${addon}${index < JSON.parse(currentUserReservation['addons']).length - 1 ? ',' : ''}`}</span>
-                  ))}
-                </div>
-
-                
-
-              </div>
-              <Separator />
-              <div className='w-full flex flex-row items-end space-x-3 justify-between text-md'>
-                <div className='flex flex-row space-x-2'>
-                  <h4 className='text-muted-100 font-medium'>Created At</h4>
-                  <span>{format(currentUserReservation['created_at'], 'MMMM dd, yyyy | p')}</span>
-                </div>
-                
-                <div className='flex flex-row items-end space-x-3 '>
-                  <span className='tracking-widest'>TOTAL</span>
-                  <span className='font-bold'>${currentUserReservation['total_price']}</span>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        ) : (
-          null
-        )}
-      <div>
-            <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><span>Reservation History</span></h1>
-            <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
-              <DataTable columns={columns} data={pastUserReservation} customColumnVisiblity={customColumnVisiblity}/>
-                    
-            </div>
-          </div>
+        No current booking!
       </div>
-      
-
-
-
     </CustomerDashboardTemplate>
-  )
+    )
+
+  } else {
+    return (
+      <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation}>
+        <div className='flex flex-col space-y-10'>
+          {currentReservationStatus !== 'complete' || !isSameDay(parse(currentUserReservation['reserved_at'], 'yyyy-MM-dd HH:mm:ss', new Date()), new Date()) ? (
+            
+            <div>
+              <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><MdOutlineNotificationsActive className='text-2xl'/> <span>Active Reservation</span></h1>
+              <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
+                
+                <div className='w-full flex flex-row items-end justify-between'>
+                  <span>
+                    {`# ${currentUserReservation?.id}`}
+                  </span>
+                  <div className='flex flex-row space-x-2'>
+                    <span className='font-semibold uppercase'>{`${currentReservationStatus}`}</span>
+                    <span>|</span>
+                    <span className='font-semibold '>
+                      {currentUserReservation['service_type']}
+                    </span>
+                  </div>
+                </div>
+                <Separator />
+  
+  
+                <div className='h-32'>
+                <Stepper activeStep={identifyReservationStatus(currentReservationStatus)} styleConfig={stepStyleConfig}>
+                  <Step label="Waiting" />
+                  <Step label="Washing" />
+                  <Step label="Pickup" />
+                  <Step label="Completed" />
+                </Stepper>
+  
+                </div>
+  
+  
+                <span className='text-slate-800/80 font-medium tracking-wider mb-1'>Details</span>
+                <div className='flex flex-col space-y-2'>
+                  <span className='flex flex-row space-x-2 border-l-4 pl-2 border-[#F9844A]'>
+                      {`Reserved At: ${format(currentUserReservation['reserved_at'], "EEEE | MMMM dd, yyyy",)}`}
+                  </span>
+                  <div className='flex flex-row space-x-2 border-l-4 pl-2 border-[#F9844A]'>
+                    <span>Addons: </span>
+                    {JSON.parse(currentUserReservation['addons']).map((addon: any, index: number) => (
+                    
+                      <span key={index} className='capitalize'>{`${addon}${index < JSON.parse(currentUserReservation?.addons).length - 1 ? ',' : ''}`}</span>
+                    ))}
+                  </div>
+  
+                  
+  
+                </div>
+                <Separator />
+                <div className='w-full flex flex-row items-end space-x-3 justify-between text-md'>
+                  <div className='flex flex-row space-x-2'>
+                    <h4 className='text-muted-100 font-medium'>Created At</h4>
+                    <span>{format(currentUserReservation?.created_at, 'MMMM dd, yyyy | p')}</span>
+                  </div>
+                  
+                  <div className='flex flex-row items-end space-x-3 '>
+                    <span className='tracking-widest'>TOTAL</span>
+                    <span className='font-bold'>${currentUserReservation?.total_price}</span>
+                  </div>
+                </div>
+  
+  
+              </div>
+            </div>
+          ) : (
+            null
+          )}
+        <div>
+              <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><span>Reservation History</span></h1>
+              <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
+                <DataTable columns={columns} data={pastUserReservation} customColumnVisiblity={customColumnVisiblity}/>
+                      
+              </div>
+            </div>
+        </div>
+      </CustomerDashboardTemplate>
+    )
+  }
 }
 
 export default CustomerActiveReservation

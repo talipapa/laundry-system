@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActiveReservationController;
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\AdminSetupController;
+use App\Http\Controllers\CustomerAccountEditController;
 use App\Http\Controllers\MessageBroadcastController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationQueueController;
@@ -91,6 +92,8 @@ Route::middleware(['auth', 'verified'])->group(function (){
     })->name('dashboard');
 
     Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
+
+    Route::get('/account', [CustomerAccountEditController::class, 'index'])->name('customer.account');
     
 
 });

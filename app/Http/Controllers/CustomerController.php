@@ -20,7 +20,8 @@ class CustomerController extends Controller
             'id' => 'required|integer',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email'
+            'email' => 'required|email',
+            'address' => 'string'
         ]);
 
         $fetchedUser = User::find($request->id);
@@ -32,7 +33,8 @@ class CustomerController extends Controller
         $fetchedUser->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'email' => strtolower($request->email)
+            'email' => strtolower($request->email),
+            'address' => $request->address
         ]);
 
         $fetchedUser->save();

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer("total_price");
             $table->dateTime("reserved_at");
             $table->json("addons")->nullable();
+            $table->longText('address')->nullable();
             $table->timestamps();
         });
     }
