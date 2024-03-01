@@ -10,6 +10,7 @@ import { Button } from '@/shadcn/ui/button';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
 import CustomerReservationAddons from '@/Components/CustomerPartials/CustomerReservationAddons';
+import { FaHouse } from "react-icons/fa6";
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -236,6 +237,12 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
     const channel = window.Echo.private(`customerStatus.${auth.user.id}`);
     channel.listen('.reservation-status', (e: any) => {
       setCurrentReservationStatus(e.status['name'])
+      if (e?.status['name'] === 'complete'){
+        window.location.reload()
+      }
+      if (e?.oldStatus['name'] === 'complete'){
+        window.location.reload()
+      }
     })  
   }, [])
   
@@ -250,7 +257,7 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
 
   } else {
     return (
-      <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation}>
+      <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation} currentTransaction={auth?.currentTransaction}>
         <div className='flex flex-col space-y-10'>
           {currentReservationStatus !== 'complete' || !isSameDay(parse(currentUserReservation['reserved_at'], 'yyyy-MM-dd HH:mm:ss', new Date()), new Date()) ? (
             
@@ -259,9 +266,15 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
               <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
                 
                 <div className='w-full flex flex-row items-end justify-between'>
-                  <span>
-                    {`# ${currentUserReservation?.id}`}
-                  </span>
+                  <div className='flex flex-col'>
+                    <span>
+                      {`# ${currentUserReservation?.id}`}
+                    </span>
+                    <div className='flex flex-row space-x-1 font-semibold'>
+                      <FaHouse className='text-xl'/>
+                      <span>{currentUserReservation?.address}</span>
+                    </div>
+                  </div>
                   <div className='flex flex-row space-x-2'>
                     <span className='font-semibold uppercase'>{`${currentReservationStatus}`}</span>
                     <span>|</span>

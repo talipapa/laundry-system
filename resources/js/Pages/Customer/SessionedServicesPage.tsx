@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 
 type Props = {}
 
-const SessionedServicesPage = ({webInfo, auth, geoLocation}: any) => {
+const SessionedServicesPage = ({webInfo, auth, geoLocation, currentTransaction}: any) => {
     const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
     const {values, errors, touched, handleSubmit, handleBlur, handleChange, setValues, setFieldValue, setFieldTouched, setErrors, isValid} = useFormik({
       initialValues: {
@@ -72,7 +72,7 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation}: any) => {
     <GuestPageLayout>
       
       <Head title="Services" />
-      <GuestNavbar webInfo={webInfo} auth={auth}/>
+      <GuestNavbar webInfo={webInfo} auth={auth} currentTransaction={auth?.currentTransaction}/>
       {/* Main content container */}
       <div className='min-h-[900px] bg-[#EEEEEE]'>
         <CanvasRestriction className="grid lg:grid-cols-3  gap-14 py-12 items-start">

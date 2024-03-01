@@ -10,9 +10,9 @@ use Inertia\Inertia;
 class ActiveReservationController extends Controller
 {
     //
-    public function index(){
+    public function index(Request $request){
         $currentUserReservation = DB::table('transactions')->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->first();
-
+        
         $pastUserReservation = DB::table('transactions')->where('user_id', auth()->user()->id)->where('status', TransactionStatus::COMPLETE->value)->orderBy('updated_at', 'desc')->get();
 
 

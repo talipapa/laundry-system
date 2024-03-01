@@ -38,6 +38,8 @@ class ServicesController extends Controller
             }
     
             $addOns = [];
+
+            
     
             try {
                 foreach ($request->addOns as $addon) {
@@ -46,7 +48,7 @@ class ServicesController extends Controller
                 $transaction = Transaction::create([
                     'user_id' => Auth::id(),
                     'service_type' => $request->serviceType[1],
-                    'total_price' => $request->serviceType[2],
+                    'total_price' => $totalPrice,
                     'reserved_at' => Carbon::parse($request->reserveOn)->timezone('Asia/Manila')->format('Y-m-d'),
                     'addons' => $addOns,
                     'address' => $request->address,
@@ -60,7 +62,7 @@ class ServicesController extends Controller
                     $transaction->id,
                     Auth::id(),
                     false,
-                    $transaction->total_price,
+                    $totalPrice,
                     ['foreground' => "text-yellow-400", 'name' => "waiting"],
                     $transaction->service_type,
                     $transaction->addons,

@@ -15,7 +15,7 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 
 
-const GuestNavbar = ({webInfo, auth}: any) => {
+const GuestNavbar = ({webInfo, auth, currentTransaction}: any) => {
   return (
         <div className='sticky top-0 z-[100]'>
             {/* Notification navbar */}
@@ -32,7 +32,9 @@ const GuestNavbar = ({webInfo, auth}: any) => {
                     
                     <div className='flex flex-row space-x-6'>
                         <Link href='/' className="text-white hover:text-[#F9844A]">Home</Link>
-                        <Link href='/services' className="text-white hover:text-[#F9844A]">Services</Link>
+                        {currentTransaction === null ? (
+                            <Link href='/services' className="text-white hover:text-[#F9844A]">Services</Link>
+                        ) : null}
                         <Link href='/services' className="text-white hover:text-[#F9844A]">About us</Link>
                         <Link href='/services' className="text-white hover:text-[#F9844A]">Contact us</Link>
                     </div>
@@ -86,7 +88,7 @@ const GuestNavbar = ({webInfo, auth}: any) => {
                                                                 Account
                                                             </span>
                                                         </Link>
-                                                        <Link href={route('dashboard')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
+                                                        <Link href={route('customer.reservation')} className="text-black hover:text-[#F9844A]  flex flex-row items-center space-x-6">
                                                             <IoNewspaperOutline  className='text-[30px]'/>
                                                             <span>
                                                                 Transactions

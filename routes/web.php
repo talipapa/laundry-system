@@ -41,10 +41,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/services', [ServicesController::class, 'index'])->name('services');
-Route::post('/services', [ServicesController::class, 'guestCreateBooking'])->name('services.booking');
 
-
+Route::middleware(['service-access'])->group(function (){
+    Route::get('/services', [ServicesController::class, 'index'])->name('services');
+    Route::post('/services', [ServicesController::class, 'guestCreateBooking'])->name('services.booking');
+});
 
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/admin-setup', [AdminSetupController::class, 'index'])->name('admin-setup');
@@ -90,13 +91,14 @@ Route::middleware(['auth', 'verified'])->group(function (){
         }  
         return redirect('/');
     })->name('dashboard');
-
+//
     Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
 
     Route::get('/account', [CustomerAccountEditController::class, 'index'])->name('customer.account');
     
 
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');

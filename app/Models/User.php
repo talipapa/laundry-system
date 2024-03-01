@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class, 'user_id');
+        return $this->hasMany(Transaction::class, 'user_id')->orderBy('created_at', 'desc');
     }
 
     // In laravel naming convention a camel case is automatically converted to snake case

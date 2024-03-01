@@ -31,6 +31,7 @@ export interface Review {
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
+        currentTransaction: any;
     };
     webInfo: {
         websiteName: string;

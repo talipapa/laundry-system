@@ -11,7 +11,6 @@ import { format } from 'date-fns'
 import { Field, useFormik, useFormikContext } from 'formik'
 import React, { useState } from 'react'
 
-type Props = {}
 
 const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
   
@@ -80,7 +79,7 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
     <GuestPageLayout>
       
       <Head title="Services" />
-      <GuestNavbar webInfo={webInfo} auth={auth}/>
+      <GuestNavbar webInfo={webInfo} auth={auth} currentTransaction={auth?.currentTransaction}/>
       {/* Main content container */}
       <div className='min-h-[900px] bg-[#EEEEEE]'>
         <CanvasRestriction className="grid lg:grid-cols-3  gap-14 py-12 items-start">
@@ -95,6 +94,7 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
                   {
                     values.serviceType[2] !== undefined && 
                     <span className='text-sm'>{`- ₱ ${values.serviceType[2]}`}</span>
+                    
                   }
                   
                 </div>
