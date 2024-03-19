@@ -47,7 +47,7 @@ class ServicesController extends Controller
             ->create([
                 'amount' => $totalPrice * 100,
                 'payment_method_allowed' => [
-                    'paymaya', 'card'  // <--- Make sure to add paymaya here.
+                    'paymaya', 'card', 'gcash', 'grabpay'  // <--- Make sure to add paymaya here.
                 ],
                 'payment_method_options' => [
                     'card' => [
@@ -107,6 +107,8 @@ class ServicesController extends Controller
 
         }
 
+        
+
 
         $user_id = null;
         $transaction_id = null;
@@ -130,6 +132,21 @@ class ServicesController extends Controller
             'address' => 'string',
             'password' => ['required', Rules\Password::defaults()],
         ]);
+
+        $paymentIntent = Paymongo::paymentIntent()
+        ->create([
+            'amount' => $totalPrice * 100,
+            'payment_method_allowed' => [
+                'paymaya', 'card' ,'gcash', 'grabpay' // <--- Make sure to add paymaya here.
+            ],
+            'payment_method_options' => [
+                'card' => [
+                    'request_three_d_secure' => 'automatic',
+                ],
+            ],
+            'description' => 'This is a test payment intent',
+            'currency' => 'PHP',
+        ]);
         
         try {
             $user = User::create([
@@ -141,21 +158,8 @@ class ServicesController extends Controller
             ]);
             $user_id = $user->id;
 
-            $paymentIntent = Paymongo::paymentIntent()->create([
-                'data' => [
-                    'attributes' => [
-                        'amount' => $totalPrice * 100,
-                        'payment_method_allowed' => ['card', "paymaya", "grab_pay", "gcash"],
-                        'payment_method_options' => [
-                            'card' => [
-                                'request_three_d_secure' => 'any'
-                            ]
-                        ],
-                        'currency' => 'PHP',
-                        'description' => 'Test Payment'
-                    ]
-                ]
-            ]);
+
+
 
             
 
@@ -177,6 +181,7 @@ class ServicesController extends Controller
             Auth::login($user);
             $transaction->save();
 
+
             broadcast(new MakeTransactionEvent(
                 "admin",
                 $transaction->id,
@@ -192,6 +197,7 @@ class ServicesController extends Controller
                 $transaction->address,
                 $paymentIntent->id
             ))->toOthers();
+            
 
         } catch (\Throwable $th) {
             if($user_id != null){
@@ -204,6 +210,8 @@ class ServicesController extends Controller
             }
             return back()->with('error', 'An error occured while processing your request. Please try again later.');
         }
+        // return back()->with('error', 'An error occured while processing your request. Please try again later.');
+
         return to_route('services.awaiting-confirmation', ['intent_id' => $paymentIntent->id]);
     }
 }

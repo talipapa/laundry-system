@@ -7,10 +7,13 @@ import { Step, Stepper } from 'react-form-stepper';
 import { Order, PageProps } from '@/types';
 import DataTable from '@/Components/DataTable';
 import { Button } from '@/shadcn/ui/button';
-import { CaretSortIcon } from '@radix-ui/react-icons';
+import { CaretSortIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
 import CustomerReservationAddons from '@/Components/CustomerPartials/CustomerReservationAddons';
 import { FaHouse } from "react-icons/fa6";
+import { Alert, AlertDescription, AlertTitle } from "@/shadcn/ui/alert"
+import { router } from '@inertiajs/react';
+
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -219,14 +222,18 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
   }
   const identifyReservationStatus = (status: string) => {
     switch (status) {
-      case 'waiting':
+      case 'unpaid':
         return 0
-      case 'washing':
+      case 'paid':
         return 1
-      case 'pickup':
+      case 'waiting':
         return 2
-      case 'complete':
+      case 'washing':
         return 3
+      case 'pickup':
+        return 4
+      case 'complete':
+        return 5
       default:
         return 0
     }
@@ -260,9 +267,19 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
       <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation} currentTransaction={auth?.currentTransaction}>
         <div className='flex flex-col space-y-10'>
           {currentReservationStatus !== 'complete' || !isSameDay(parse(currentUserReservation['reserved_at'], 'yyyy-MM-dd HH:mm:ss', new Date()), new Date()) ? (
-            
+  
             <div>
+              {currentReservationStatus === 'unpaid' ? (
+                    <Alert variant="destructive" className='mb-4 hover:scale-105 transition-all duration-100 select-none' onClick={() => router.get(route('services.awaiting-confirmation', {"intent_id": currentUserReservation?.payment_intent_id}))}>
+                      <ExclamationTriangleIcon className="h-4 w-4" />
+                      <AlertTitle>Notice!</AlertTitle>
+                      <AlertDescription>
+                        Service is still unpaid. Click here to proceed.
+                      </AlertDescription>
+                    </Alert>
+              ) : null}
               <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><MdOutlineNotificationsActive className='text-2xl'/> <span>Active Reservation</span></h1>
+
               <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
                 
                 <div className='w-full flex flex-row items-end justify-between'>
@@ -288,6 +305,8 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
   
                 <div className='h-32'>
                 <Stepper activeStep={identifyReservationStatus(currentReservationStatus)} styleConfig={stepStyleConfig}>
+                  <Step label="Unpaid" />
+                  <Step label="Paid" />
                   <Step label="Waiting" />
                   <Step label="Washing" />
                   <Step label="Pickup" />
