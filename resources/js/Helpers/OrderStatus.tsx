@@ -1,4 +1,16 @@
 export const availableStatus = {
+    unpaid: {
+        name: "unpaid",
+        color: "bg-red-500",
+        text: "Unpaid",
+        foreground: "text-red-400",
+    },
+    paid: {
+        name: "paid",
+        color: "bg-green-500",
+        text: "Paid",
+        foreground: "text-green-400",
+    },
     waiting: {
         name: "waiting",
         color: "bg-yellow-500",

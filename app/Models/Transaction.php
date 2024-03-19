@@ -21,8 +21,11 @@ class Transaction extends Model
         'addons',
         'address',
         'total_price',
-        'service_type'
+        'service_type',
+        'payment_intent_id'
     ];
+
+    
 
     protected $casts = [
         'addons' => 'array',
@@ -35,6 +38,8 @@ class Transaction extends Model
     }
 
     protected $statusMapping = [
+        'unpaid' => 'text-red-400',
+        'paid' => 'text-green-400',
         'waiting' => 'text-yellow-400',
         'washing' => 'text-blue-400',
         'pickup' => 'text-green-400',

@@ -29,16 +29,16 @@ export default function Login({ status, canResetPassword }: { status?: string, c
     return (
         <GuestLayout>
             <Head title="Log in" />
-
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
-
+            <div className='w-full items-center flex flex-row justify-center text-center text-4xl mb-6'>
+                Login to Your Account
+            </div>
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
                     <TextInput
                         id="email"
                         type="email"
+                        placeholder='Email'
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
@@ -51,10 +51,9 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
                     <TextInput
                         id="password"
+                        placeholder='Password'
                         type="password"
                         name="password"
                         value={data.password}
@@ -66,7 +65,15 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="block mt-4">
+                <div className='flex w-full flex-row justify-between items-center mt-5'>
+                    <div className="flex flex-row items-bottom jsutify-center w-full">
+                        <PrimaryButton className="w-full text-center items-center justify-center " disabled={processing}>
+                            Log in
+                        </PrimaryButton>       
+                                    
+                    </div>
+                </div>
+                <div className='flex flex-row justify-between mt-3'>
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
@@ -75,9 +82,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                         />
                         <span className="ms-2 text-sm text-gray-600">Remember me</span>
                     </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
+                   
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
@@ -86,12 +91,25 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                             Forgot your password?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
                 </div>
             </form>
+            <div className='relative w-full mt-7 mb-12'>
+                <div className='bottom-[-12px] z-[5] w-full px-5 absolute text-center'>
+                    <span className='bg-white px-4 text-md font-semibold'>OR</span>
+                </div>
+                <hr className='mt-6 bottom-0 absolute w-full h-[3px] bg-[#807d7d] '/>
+            </div>
+            
+            <div className='w-full flex flex-row items-center justify-center'>
+                <Link
+                    href={route('register')}
+                    className="text-md font-semibold text-gray-600 hover:text-[#F2844A] rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
+                >
+                    Register an Account
+                </Link>
+
+            </div>
+            
         </GuestLayout>
     );
 }

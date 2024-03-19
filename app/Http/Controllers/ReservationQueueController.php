@@ -15,7 +15,7 @@ class ReservationQueueController extends Controller
 {
     //
     public function index(){
-        $currentOrders = Transaction::orderBy('updated_at', 'desc')->whereNot('status', TransactionStatus::COMPLETE->value)->get();
+        $currentOrders = Transaction::orderBy('updated_at', 'desc')->whereNot('status', TransactionStatus::COMPLETE->value)->whereNot('status', TransactionStatus::UNPAID->value)->get();
         $payload = [
             'currentOrders' => $currentOrders
         ];

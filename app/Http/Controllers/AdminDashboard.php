@@ -62,7 +62,7 @@ class AdminDashboard extends Controller
 
         
         $itemTransactionLimit = 10;
-        $recentReservations = Transaction::where('status', '!=', TransactionStatus::COMPLETE->value)->orderBy('created_at', 'desc')->limit($itemTransactionLimit)->get();
+        $recentReservations = Transaction::where('status', '!=', TransactionStatus::COMPLETE->value, 'and', TransactionStatus::UNPAID->value)->orderBy('created_at', 'desc')->limit($itemTransactionLimit)->get();
         $recentCompletedTransactions = Transaction::where('status', TransactionStatus::COMPLETE->value)->orderBy('created_at', 'desc')->limit($itemTransactionLimit)->get();
         
 

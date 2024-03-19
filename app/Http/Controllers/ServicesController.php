@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Luigel\Paymongo\Facades\Paymongo;
 
 class ServicesController extends Controller
 {
@@ -27,6 +28,9 @@ class ServicesController extends Controller
 
     public function guestCreateBooking(Request $request){
 
+
+
+        
         if (Auth::check()){
             $user_id = null;
             $transaction_id = null;
@@ -39,7 +43,21 @@ class ServicesController extends Controller
     
             $addOns = [];
 
-            
+            $paymentIntent = Paymongo::paymentIntent()
+            ->create([
+                'amount' => $totalPrice * 100,
+                'payment_method_allowed' => [
+                    'paymaya', 'card'  // <--- Make sure to add paymaya here.
+                ],
+                'payment_method_options' => [
+                    'card' => [
+                        'request_three_d_secure' => 'automatic',
+                    ],
+                ],
+                'description' => 'This is a test payment intent',
+                'currency' => 'PHP',
+            ]);
+
     
             try {
                 foreach ($request->addOns as $addon) {
@@ -53,6 +71,7 @@ class ServicesController extends Controller
                     'addons' => $addOns,
                     'address' => $request->address,
                     'is_reviewed' => false,
+                    'payment_intent_id' => $paymentIntent->id,
                 ]);
                 $transaction_id = $transaction->id;
                 $transaction->save();
@@ -63,15 +82,16 @@ class ServicesController extends Controller
                     Auth::id(),
                     false,
                     $totalPrice,
-                    ['foreground' => "text-yellow-400", 'name' => "waiting"],
+                    ['foreground' => "text-red-400", 'name' => "unpaid"],
                     $transaction->service_type,
                     $transaction->addons,
                     $transaction->created_at,
                     $transaction->updated_at,
                     $transaction->reserved_at,
-                    $transaction->address
+                    $transaction->address,
+                    $paymentIntent->id
                 ))->toOthers();
-                return to_route('customer.reservation');
+                return to_route('services.awaiting-confirmation', ['intent_id' => $paymentIntent->id]);
             } catch (\Throwable $th) {
                 if($user_id != null){
                     $user = User::find($user_id);
@@ -121,6 +141,26 @@ class ServicesController extends Controller
             ]);
             $user_id = $user->id;
 
+            $paymentIntent = Paymongo::paymentIntent()->create([
+                'data' => [
+                    'attributes' => [
+                        'amount' => $totalPrice * 100,
+                        'payment_method_allowed' => ['card', "paymaya", "grab_pay", "gcash"],
+                        'payment_method_options' => [
+                            'card' => [
+                                'request_three_d_secure' => 'any'
+                            ]
+                        ],
+                        'currency' => 'PHP',
+                        'description' => 'Test Payment'
+                    ]
+                ]
+            ]);
+
+            
+
+    
+
             $transaction = Transaction::create([
                 'user_id' => $user->id,
                 'service_type' => $request->serviceType[1],
@@ -129,6 +169,7 @@ class ServicesController extends Controller
                 'address' => $request->address,
                 'addons' => $addOns,
                 'is_reviewed' => false,
+                'payment_intent_id' => $paymentIntent->id,
             ]);
             $transaction_id = $transaction->id;
             $user->save();
@@ -142,13 +183,14 @@ class ServicesController extends Controller
                 $user->id,
                 false,
                 $transaction->total_price,
-                ['foreground' => "text-yellow-400", 'name' => "waiting"],
+                ['foreground' => "text-red-400", 'name' => "unpaid"],
                 $transaction->service_type,
                 $transaction->addons,
                 $transaction->created_at,
                 $transaction->updated_at,
                 $transaction->reserved_at,
-                $transaction->address
+                $transaction->address,
+                $paymentIntent->id
             ))->toOthers();
 
         } catch (\Throwable $th) {
@@ -162,6 +204,6 @@ class ServicesController extends Controller
             }
             return back()->with('error', 'An error occured while processing your request. Please try again later.');
         }
-        return redirect(RouteServiceProvider::HOME);
+        return to_route('services.awaiting-confirmation', ['intent_id' => $paymentIntent->id]);
     }
 }

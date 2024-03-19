@@ -10,6 +10,7 @@ use App\Http\Controllers\ReservationQueueController;
 
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Paymongo\PaymongoIntentController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\WebsiteOptions;
 use App\Models\Transaction;
@@ -95,7 +96,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
 
     Route::get('/account', [CustomerAccountEditController::class, 'index'])->name('customer.account');
-    
+    Route::get('/awaiting-confirmation', [PaymongoIntentController::class, 'viewIntent'])->name('services.awaiting-confirmation');    
 
 });
 

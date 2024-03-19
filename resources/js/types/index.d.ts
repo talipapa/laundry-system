@@ -21,6 +21,7 @@ export interface Order {
     created_at: string;
     updated_at: string;
     address: string;
+    payment_intent_id: string;
 }
 
 export interface Review {

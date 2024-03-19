@@ -77,7 +77,7 @@ export const columns: ColumnDef<Order>[] = [
 
       return (
         <div className='flex flex-col items-start'>
-          <div className={`${getValue().foreground} text-black px-2 rounded-lg`}>
+          <div className={`${getValue().foreground} bg-black py-1 text-black px-2 rounded-lg`}>
               {getValue().name}
           </div>
         </div>
@@ -134,6 +134,21 @@ export const columns: ColumnDef<Order>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           ID
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )},
+    size: 1
+  },
+  {
+    accessorKey: "payment_intent_id",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          className='px-4'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Intent ID
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       )},

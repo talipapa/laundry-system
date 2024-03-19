@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignId("user_id")->nullable(true)->constrained('users', 'id')->onDelete('set null');
-            $table->string("status")->default("waiting");
+            $table->string("status")->default("unpaid");
             $table->boolean("is_reviewed")->default(false);
             $table->string("service_type");
             $table->integer("total_price");
             $table->dateTime("reserved_at");
             $table->json("addons")->nullable();
             $table->longText('address')->nullable();
+            $table->string('payment_intent_id')->nullable();
             $table->timestamps();
         });
     }

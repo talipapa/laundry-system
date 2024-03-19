@@ -178,6 +178,7 @@ export const columns: ColumnDef<Order>[] = [
     size: 1
   },
 
+
   {
     accessorKey: "created_at",
     header: ({column}) => {

@@ -25,7 +25,8 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
       serviceType: '',
       addOns: [],
       reserveOn: '',
-      address: ''
+      address: '',
+      
     },
     validationSchema: BookingSchema,
     onSubmit: (values) => {
