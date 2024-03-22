@@ -127,7 +127,7 @@ export const columns: ColumnDef<Order>[] = [
     minSize: 5000
   },
   {
-    accessorKey: "addons",
+    accessorKey: "add_ons",
     header: ({column}: any) => {
       return (
         <div className='relative'>
@@ -323,9 +323,9 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
                   </span>
                   <div className='flex flex-row space-x-2 border-l-4 pl-2 border-[#F9844A]'>
                     <span>Addons: </span>
-                    {JSON.parse(currentUserReservation['addons']).map((addon: any, index: number) => (
+                    {JSON.parse(currentUserReservation['add_ons']).map((addon: any, index: number) => (
                     
-                      <span key={index} className='capitalize'>{`${addon}${index < JSON.parse(currentUserReservation?.addons).length - 1 ? ',' : ''}`}</span>
+                      <span key={index} className='capitalize'>{`${addon}${index < JSON.parse(currentUserReservation?.add_ons).length - 1 ? ',' : ''}`}</span>
                     ))}
                   </div>
   

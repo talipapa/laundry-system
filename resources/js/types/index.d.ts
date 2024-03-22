@@ -13,7 +13,7 @@ export interface Order {
     id: number;
     user_id: number;
     is_reviewed: number | boolean;
-    addons: Array<string> | string | any;
+    add_ons: Array<string> | string | any;
     status: string;
     service_type: string;
     reserved_at: string;

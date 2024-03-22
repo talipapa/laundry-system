@@ -35,12 +35,12 @@ class AdminDashboard extends Controller
         $totalAddOnsCount = [
             [
                 'name' => "Shoe cleaning",
-                'count' => count(Transaction::whereJsonContains('addons', ServiceAddons::SHOE_CLEANING->name)->get()),
+                'count' => count(Transaction::whereJsonContains('add_ons', ServiceAddons::SHOE_CLEANING->name)->get()),
                 'fill' => '#4ade80'
             ],
             [
                 'name' => "Washing",
-                'count' => count(Transaction::whereJsonContains('addons', ServiceAddons::IRONING->name)->get()),
+                'count' => count(Transaction::whereJsonContains('add_ons', ServiceAddons::IRONING->name)->get()),
                 'fill' => '#6aa5fa'
             ],
         ];

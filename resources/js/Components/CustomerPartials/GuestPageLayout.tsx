@@ -4,7 +4,7 @@ type Props = {}
 
 const GuestPageLayout = ({children}: any) => {
   return (
-    <div className='xl:min-h-[100vh]  flex flex-col justify-between'>
+    <div className='xl:min-h-[100vh] flex flex-col justify-between'>
         {children}
     </div>
   )

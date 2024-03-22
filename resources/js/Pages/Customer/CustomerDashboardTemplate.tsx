@@ -15,7 +15,7 @@ const CustomerDashboardTemplate = ({children, auth, headerText, webInfo, geoLoca
 
         <div className='w-full bg-[#EEEEEE] py-12 flex flex-col items-center space-y-24'>
             {/* Main content container */}
-            <CanvasRestriction className='min-h-[800px]'>
+            <CanvasRestriction className='min-h-[100vh]'>
                 {children}
             </CanvasRestriction>
         </div>

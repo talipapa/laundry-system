@@ -36,7 +36,7 @@ class TransactionFactory extends Factory
         return [
             'user_id' => fake()->numberBetween(50, 200),
             'status' => Arr::random(['waiting', 'washing', 'pickup', 'complete']),
-            'addons' => [ServiceAddons::SHOE_CLEANING->name, ServiceAddons::IRONING->name],
+            'add_ons' => [ServiceAddons::SHOE_CLEANING->name, ServiceAddons::IRONING->name],
             'service_type' => $serviceType,
             'total_price' => $totalPrice,
             'reserved_at' => fake()->dateTimeBetween('-1 week', '+1 week'),

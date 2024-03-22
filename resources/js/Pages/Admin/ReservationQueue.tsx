@@ -122,7 +122,7 @@ export const columns: ColumnDef<Order>[] = [
     minSize: 5000
   },
   {
-    accessorKey: "addons",
+    accessorKey: "add_ons",
     header: ({column}) => {
       return (
         <div className='relative'>
@@ -221,8 +221,7 @@ const ReservationQueue = ({auth, currentOrders}: any) => {
   useEffect(() => {
     const channel = window.Echo.private(`transaction.admin`);
     channel.listen('.live-reservation', (e: any) => {
-      console.log(e)
-      setData((prevData: any) => [e, ...prevData])
+      window.location.reload()
     })  
   }, [])
 

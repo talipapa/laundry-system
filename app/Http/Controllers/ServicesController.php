@@ -45,9 +45,9 @@ class ServicesController extends Controller
 
             $paymentIntent = Paymongo::paymentIntent()
             ->create([
-                'amount' => $totalPrice * 100,
+                'amount' => $totalPrice,
                 'payment_method_allowed' => [
-                    'paymaya', 'card', 'gcash', 'grabpay'  // <--- Make sure to add paymaya here.
+                    'paymaya', 'card', 'gcash', 'grab_pay'  // <--- Make sure to add paymaya here.
                 ],
                 'payment_method_options' => [
                     'card' => [
@@ -68,7 +68,7 @@ class ServicesController extends Controller
                     'service_type' => $request->serviceType[1],
                     'total_price' => $totalPrice,
                     'reserved_at' => Carbon::parse($request->reserveOn)->timezone('Asia/Manila')->format('Y-m-d'),
-                    'addons' => $addOns,
+                    'add_ons' => $addOns,
                     'address' => $request->address,
                     'is_reviewed' => false,
                     'payment_intent_id' => $paymentIntent->id,
@@ -76,21 +76,21 @@ class ServicesController extends Controller
                 $transaction_id = $transaction->id;
                 $transaction->save();
     
-                broadcast(new MakeTransactionEvent(
-                    "admin",
-                    $transaction->id,
-                    Auth::id(),
-                    false,
-                    $totalPrice,
-                    ['foreground' => "text-red-400", 'name' => "unpaid"],
-                    $transaction->service_type,
-                    $transaction->addons,
-                    $transaction->created_at,
-                    $transaction->updated_at,
-                    $transaction->reserved_at,
-                    $transaction->address,
-                    $paymentIntent->id
-                ))->toOthers();
+                // broadcast(new MakeTransactionEvent(
+                //     "admin",
+                //     $transaction->id,
+                //     Auth::id(),
+                //     false,
+                //     $totalPrice,
+                //     ['foreground' => "text-red-400", 'name' => "unpaid"],
+                //     $transaction->service_type,
+                //     $transaction->add_ons,
+                //     $transaction->created_at,
+                //     $transaction->updated_at,
+                //     $transaction->reserved_at,
+                //     $transaction->address,
+                //     $paymentIntent->id
+                // ))->toOthers();
                 return to_route('services.awaiting-confirmation', ['intent_id' => $paymentIntent->id]);
             } catch (\Throwable $th) {
                 if($user_id != null){
@@ -135,9 +135,9 @@ class ServicesController extends Controller
 
         $paymentIntent = Paymongo::paymentIntent()
         ->create([
-            'amount' => $totalPrice * 100,
+            'amount' => $totalPrice,
             'payment_method_allowed' => [
-                'paymaya', 'card' ,'gcash', 'grabpay' // <--- Make sure to add paymaya here.
+                'paymaya', 'card' ,'gcash', 'grab_pay' // <--- Make sure to add paymaya here.
             ],
             'payment_method_options' => [
                 'card' => [
@@ -171,7 +171,7 @@ class ServicesController extends Controller
                 'total_price' => $totalPrice,
                 'reserved_at' => Carbon::parse($request->reserveOn)->timezone('Asia/Manila')->format('Y-m-d'),
                 'address' => $request->address,
-                'addons' => $addOns,
+                'add_ons' => $addOns,
                 'is_reviewed' => false,
                 'payment_intent_id' => $paymentIntent->id,
             ]);
@@ -182,21 +182,21 @@ class ServicesController extends Controller
             $transaction->save();
 
 
-            broadcast(new MakeTransactionEvent(
-                "admin",
-                $transaction->id,
-                $user->id,
-                false,
-                $transaction->total_price,
-                ['foreground' => "text-red-400", 'name' => "unpaid"],
-                $transaction->service_type,
-                $transaction->addons,
-                $transaction->created_at,
-                $transaction->updated_at,
-                $transaction->reserved_at,
-                $transaction->address,
-                $paymentIntent->id
-            ))->toOthers();
+            // broadcast(new MakeTransactionEvent(
+            //     "admin",
+            //     $transaction->id,
+            //     $user->id,
+            //     false,
+            //     $transaction->total_price,
+            //     ['foreground' => "text-red-400", 'name' => "unpaid"],
+            //     $transaction->service_type,
+            //     $transaction->add_ons,
+            //     $transaction->created_at,
+            //     $transaction->updated_at,
+            //     $transaction->reserved_at,
+            //     $transaction->address,
+            //     $paymentIntent->id
+            // ))->toOthers();
             
 
         } catch (\Throwable $th) {

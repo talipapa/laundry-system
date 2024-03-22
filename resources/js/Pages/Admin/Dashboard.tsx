@@ -129,7 +129,7 @@ export const columns: ColumnDef<Order>[] = [
         }
     },
     {
-        accessorKey: "addons",
+        accessorKey: "add_ons",
         header: ({column}) => {
         return (
             <div className='relative'>

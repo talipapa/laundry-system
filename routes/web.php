@@ -96,7 +96,9 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
 
     Route::get('/account', [CustomerAccountEditController::class, 'index'])->name('customer.account');
-    Route::get('/awaiting-confirmation', [PaymongoIntentController::class, 'viewIntent'])->name('services.awaiting-confirmation');    
+    Route::get('/awaiting-confirmation', [PaymongoIntentController::class, 'viewIntent'])->name('services.awaiting-confirmation');   
+    Route::post('/awaiting-confirmation', [PaymongoIntentController::class, 'makePayment'])->name('services.make-payment'); 
+    Route::get('/payment-success', [PaymongoIntentController::class, 'successPayment'])->name('services.payment-success');
 
 });
 

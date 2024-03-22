@@ -18,7 +18,7 @@ class Transaction extends Model
         'status',
         'is_reviewed',
         'reserved_at',
-        'addons',
+        'add_ons',
         'address',
         'total_price',
         'service_type',
@@ -28,9 +28,10 @@ class Transaction extends Model
     
 
     protected $casts = [
-        'addons' => 'array',
+        'add_ons' => 'array',
         'is_reviewed' => 'boolean'
     ];
+
 
     public function user(): BelongsTo
     {
@@ -45,6 +46,13 @@ class Transaction extends Model
         'pickup' => 'text-green-400',
         'complete' => 'text-green-100',
     ];
+
+    // Define the accessor for 'add_ons' attribute
+    public function getAddOnsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
 
     public function getStatusAttribute($value)
     {

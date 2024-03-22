@@ -11,4 +11,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    optimizeDeps: {
+        exclude: ['js-big-decimal']
+    }
 });

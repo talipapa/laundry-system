@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("service_type");
             $table->integer("total_price");
             $table->dateTime("reserved_at");
-            $table->json("addons")->nullable();
+            $table->json("add_ons")->nullable();
             $table->longText('address')->nullable();
             $table->string('payment_intent_id')->nullable();
             $table->timestamps();
