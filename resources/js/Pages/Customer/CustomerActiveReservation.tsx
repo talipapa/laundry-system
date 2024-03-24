@@ -201,7 +201,7 @@ export const columns: ColumnDef<Order>[] = [
 ]
 
 
-const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReservation, pastUserReservation}: PageProps) => {
+const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReservation, pastUserReservation, feedbackDecider}: PageProps) => {
 
   const customColumnVisiblity = {
     'created_at': false,
@@ -239,6 +239,15 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
     }
   }
 
+  const letUserFeedback = (currentReservationStatus: string) => {
+    if (currentReservationStatus !== 'complete'){
+      return false
+    }
+    if (feedbackDecider === false){
+      return false
+    }
+    return true;
+  }
 
   useEffect(() => {
     const channel = window.Echo.private(`customerStatus.${auth.user.id}`);
@@ -262,12 +271,12 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
     </CustomerDashboardTemplate>
     )
 
+
   } else {
     return (
       <CustomerDashboardTemplate auth={auth} headerText="Dashboard" webInfo={webInfo} geoLocation={geoLocation} currentTransaction={auth?.currentTransaction}>
         <div className='flex flex-col space-y-10'>
           {currentReservationStatus !== 'complete' || !isSameDay(parse(currentUserReservation['reserved_at'], 'yyyy-MM-dd HH:mm:ss', new Date()), new Date()) ? (
-  
             <div>
               {currentReservationStatus === 'unpaid' ? (
                     <Alert variant="destructive" className='mb-4 hover:scale-105 transition-all duration-100 select-none' onClick={() => router.get(route('services.awaiting-confirmation', {"intent_id": currentUserReservation?.payment_intent_id}))}>
@@ -278,10 +287,19 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
                       </AlertDescription>
                     </Alert>
               ) : null}
-              <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><MdOutlineNotificationsActive className='text-2xl'/> <span>Active Reservation</span></h1>
+              {!letUserFeedback(currentUserReservation?.status)? (
+                <h1 className='text-xl font-semibold px-2 pb-2 flex flex-row items-center relative space-x-2'><MdOutlineNotificationsActive className='text-2xl'/><span>Active Reservation</span></h1>
+              ) : (
+                <Alert variant='uplift' className='mb-4 hover:scale-105 transition-all duration-100 select-none' onClick={() => router.get(route('customer.review-page'))}>
+                  <ExclamationTriangleIcon className="h-4 w-4" />
+                  <AlertTitle>Do you like our service?</AlertTitle>
+                  <AlertDescription>
+                    Click here to leave a feedback
+                  </AlertDescription>
+                </Alert>
+              )}
 
               <div className='bg-white w-full  rounded-lg shadow-lg p-6 space-y-3'>
-                
                 <div className='w-full flex flex-row items-end justify-between'>
                   <div className='flex flex-col'>
                     <span>
@@ -328,8 +346,6 @@ const CustomerActiveReservation = ({auth, webInfo, geoLocation, currentUserReser
                       <span key={index} className='capitalize'>{`${addon}${index < JSON.parse(currentUserReservation?.add_ons).length - 1 ? ',' : ''}`}</span>
                     ))}
                   </div>
-  
-                  
   
                 </div>
                 <Separator />

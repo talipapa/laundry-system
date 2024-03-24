@@ -18,11 +18,11 @@ class DetectOwner
     public function handle(Request $request, Closure $next): Response
     {
         if (User::where('role', UserLevel::OWNER)->count() == 0){
-            if (auth()->user()->role == UserLevel::CUSTOMER->value){
-                return redirect()->route('dashboard');
-            }
-            return redirect()->route('admin-setup');
+            return to_route('admin-setup');
         } 
+        if (auth()->user()->role == UserLevel::CUSTOMER->value){
+            return to_route('dashboard');
+        }
         return $next($request);
 
 

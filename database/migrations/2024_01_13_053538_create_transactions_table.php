@@ -15,7 +15,6 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignId("user_id")->nullable(true)->constrained('users', 'id')->onDelete('set null');
             $table->string("status")->default("unpaid");
-            $table->boolean("is_reviewed")->default(false);
             $table->string("service_type");
             $table->integer("total_price");
             $table->dateTime("reserved_at");

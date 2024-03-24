@@ -16,7 +16,6 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'status',
-        'is_reviewed',
         'reserved_at',
         'add_ons',
         'address',
@@ -29,7 +28,6 @@ class Transaction extends Model
 
     protected $casts = [
         'add_ons' => 'array',
-        'is_reviewed' => 'boolean'
     ];
 
 

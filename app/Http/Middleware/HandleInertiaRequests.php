@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
                 'review' => [
                     'reviewCount' => Review::all()->sum('rating'),
                     'reviewMessages' => Review::orderBy('created_at', 'desc')->take(50)->get(),
-                    'reviewAverage' => Review::all()->sum('rating') / Review::all()->count(),
+                    'reviewAverage' => Review::all()->count() == 0 ? 0 : Review::all()->sum('rating') / Review::all()->count(),
                 ],
             ],
             'geoLocation' => [

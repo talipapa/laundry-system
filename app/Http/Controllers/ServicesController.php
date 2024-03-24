@@ -18,12 +18,14 @@ use Luigel\Paymongo\Facades\Paymongo;
 class ServicesController extends Controller
 {
     public function index(){
+        $payload = [
+            'serverError' => session("error")
+        ];
 
         if (Auth::check()) {
-            return Inertia::render('Customer/SessionedServicesPage');
+            return Inertia::render('Customer/SessionedServicesPage', $payload);
         }
-
-        return Inertia::render('Customer/ServicesPage');
+        return Inertia::render('Customer/ServicesPage', $payload);
     }
 
     public function guestCreateBooking(Request $request){
@@ -43,20 +45,27 @@ class ServicesController extends Controller
     
             $addOns = [];
 
-            $paymentIntent = Paymongo::paymentIntent()
-            ->create([
-                'amount' => $totalPrice,
-                'payment_method_allowed' => [
-                    'paymaya', 'card', 'gcash', 'grab_pay'  // <--- Make sure to add paymaya here.
-                ],
-                'payment_method_options' => [
-                    'card' => [
-                        'request_three_d_secure' => 'automatic',
+            $paymentIntent = null;
+
+            try {
+                $paymentIntent = Paymongo::paymentIntent()
+                ->create([
+                    'amount' => $totalPrice,
+                    'payment_method_allowed' => [
+                        'paymaya', 'card', 'gcash', 'grab_pay'  // <--- Make sure to add paymaya here.
                     ],
-                ],
-                'description' => 'This is a test payment intent',
-                'currency' => 'PHP',
-            ]);
+                    'payment_method_options' => [
+                        'card' => [
+                            'request_three_d_secure' => 'automatic',
+                        ],
+                    ],
+                    'description' => 'This is a test payment intent',
+                    'currency' => 'PHP',
+                ]);
+            } catch (\Throwable $th) {
+                return back()->with('error', $th->getMessage());
+            }
+
 
     
             try {
@@ -133,22 +142,22 @@ class ServicesController extends Controller
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
-        $paymentIntent = Paymongo::paymentIntent()
-        ->create([
-            'amount' => $totalPrice,
-            'payment_method_allowed' => [
-                'paymaya', 'card' ,'gcash', 'grab_pay' // <--- Make sure to add paymaya here.
-            ],
-            'payment_method_options' => [
-                'card' => [
-                    'request_three_d_secure' => 'automatic',
-                ],
-            ],
-            'description' => 'This is a test payment intent',
-            'currency' => 'PHP',
-        ]);
-        
         try {
+            $paymentIntent = Paymongo::paymentIntent()
+            ->create([
+                'amount' => $totalPrice,
+                'payment_method_allowed' => [
+                    'paymaya', 'card' ,'gcash', 'grab_pay' // <--- Make sure to add paymaya here.
+                ],
+                'payment_method_options' => [
+                    'card' => [
+                        'request_three_d_secure' => 'automatic',
+                    ],
+                ],
+                'description' => 'This is a test payment intent',
+                'currency' => 'PHP',
+            ]);
+
             $user = User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -157,13 +166,6 @@ class ServicesController extends Controller
                 'password' => Hash::make($request->password),
             ]);
             $user_id = $user->id;
-
-
-
-
-            
-
-    
 
             $transaction = Transaction::create([
                 'user_id' => $user->id,
@@ -208,10 +210,8 @@ class ServicesController extends Controller
                 $transaction = Transaction::find($transaction_id);
                 $transaction->delete();
             }
-            return back()->with('error', 'An error occured while processing your request. Please try again later.');
+            return back()->with('error', $th->getMessage());
         }
-        // return back()->with('error', 'An error occured while processing your request. Please try again later.');
-
         return to_route('services.awaiting-confirmation', ['intent_id' => $paymentIntent->id]);
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservationQueueController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Paymongo\PaymongoIntentController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\WebsiteOptions;
 use App\Models\Transaction;
@@ -56,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
 
 
 // Route for admins / owner
-Route::middleware(['auth', 'verified', 'admin-clearance', 'detect-owner'])->group(function (){
+Route::middleware(['auth', 'verified', 'detect-owner','admin-clearance'])->group(function (){
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/reservation', [ReservationQueueController::class, 'index'])->name('admin.reservation-queue');
     Route::get('/admin/customer', [CustomerController::class, 'index'])->name('admin.customer');
@@ -81,7 +82,7 @@ Route::middleware(['auth', 'verified', 'admin-clearance', 'detect-owner'])->grou
 });
 
 // Route for customers
-Route::middleware(['auth', 'verified'])->group(function (){
+Route::middleware(['auth', 'verified', 'detect-owner'])->group(function (){
     Route::get('/dashboard', function() {
         $array = [
             UserLevel::OWNER->value,
@@ -94,16 +95,16 @@ Route::middleware(['auth', 'verified'])->group(function (){
     })->name('dashboard');
 //
     Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
-
     Route::get('/account', [CustomerAccountEditController::class, 'index'])->name('customer.account');
     Route::get('/awaiting-confirmation', [PaymongoIntentController::class, 'viewIntent'])->name('services.awaiting-confirmation');   
     Route::post('/awaiting-confirmation', [PaymongoIntentController::class, 'makePayment'])->name('services.make-payment'); 
     Route::get('/payment-success', [PaymongoIntentController::class, 'successPayment'])->name('services.payment-success');
-
+    Route::get('/review', [ReviewController::class, 'viewReviewPage'])->name('customer.review-page');
+    Route::post('/review', [ReviewController::class, 'makeCustomerReview'])->name('customer.review-make');
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
 });

@@ -4,6 +4,8 @@ import GuestNavbar from '@/Components/CustomerPartials/GuestNavbar'
 import GuestPageLayout from '@/Components/CustomerPartials/GuestPageLayout'
 import { availableDay } from '@/Helpers/AvailableDay'
 import { SessionedBookingSchema } from '@/Schema/GuestServicesBooking'
+import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
+import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Head, router } from '@inertiajs/react'
 import { format } from 'date-fns'
@@ -12,7 +14,7 @@ import React, { useState } from 'react'
 
 type Props = {}
 
-const SessionedServicesPage = ({webInfo, auth, geoLocation, currentTransaction}: any) => {
+const SessionedServicesPage = ({webInfo, auth, geoLocation, currentTransaction, serverError}: any) => {
     const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
     const {values, errors, touched, handleSubmit, handleBlur, handleChange, setValues, setFieldValue, setFieldTouched, setErrors, isValid} = useFormik({
       initialValues: {
@@ -75,7 +77,9 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation, currentTransaction}:
       <GuestNavbar webInfo={webInfo} auth={auth} currentTransaction={auth?.currentTransaction}/>
       {/* Main content container */}
       <div className='min-h-[900px] bg-[#EEEEEE]'>
+        
         <CanvasRestriction className="grid lg:grid-cols-3  gap-14 py-12 items-start">
+          
           <div className='flex flex-col space-y-6 col-span-2 lg:col-span-1 lg:sticky lg:top-[100px]'>
             <div className='bg-white w-full rounded-lg shadow-lg p-4 flex flex-col'>
               <span className="text-xl font-bold mb-2">Your booking details</span>
@@ -116,7 +120,18 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation, currentTransaction}:
             </div>
           </div>
           <form onSubmit={handleSubmit} className='col-span-2 flex flex-col space-y-6 items-end'>
+            {serverError ? (
+            <Alert variant="destructive">
+              <AlertTitle>Something went wrong</AlertTitle>
+              <AlertDescription>
+                {serverError}
+              </AlertDescription>
+            </Alert>
+            ) : null}
+
+            
             <div className='bg-white w-full rounded-lg shadow-lg p-4'>
+            
               <div className="flex flex-col space-y-1 w-full">
                 <label htmlFor="address" className="form-label text-xl font-semibold">
                   Address
@@ -234,7 +249,7 @@ const SessionedServicesPage = ({webInfo, auth, geoLocation, currentTransaction}:
                 </div>
               </div>
             </div>
-            <button type='submit' className='bg-[#4A86FF] text-white p-2 rounded-sm' disabled={!isValid || isDisabledButton}>RESERVE NOW</button>
+            <Button type='submit' className='p-2 rounded-sm' disabled={!isValid || isDisabledButton}>RESERVE NOW</Button>
           </form>
 
         </CanvasRestriction>

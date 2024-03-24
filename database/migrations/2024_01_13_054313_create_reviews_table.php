@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignUlid('transaction_id')->nullable()->constrained('transactions', 'id')->onDelete('SET NULL');
             $table->foreignId("user_id")->nullable(true)->constrained('users', 'id')->onDelete('set null');
             $table->string("rating")->default("0");
             $table->string("comment");

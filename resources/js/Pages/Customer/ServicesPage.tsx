@@ -5,6 +5,8 @@ import GuestPageLayout from '@/Components/CustomerPartials/GuestPageLayout'
 import { InputTextField } from '@/Components/InputCustomFields'
 import { availableDay } from '@/Helpers/AvailableDay'
 import { BookingSchema } from '@/Schema/GuestServicesBooking'
+import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
+import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Head, router, useForm } from '@inertiajs/react'
 import { format } from 'date-fns'
@@ -12,7 +14,7 @@ import { Field, useFormik, useFormikContext } from 'formik'
 import React, { useState } from 'react'
 
 
-const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
+const ServicesPage = ({webInfo, geoLocation, auth, serverError}: any) => {
   
   const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false)
   const {values, errors, touched, handleSubmit, handleBlur, handleChange, setValues, setFieldValue, setFieldTouched, setErrors, isValid} = useFormik({
@@ -85,6 +87,7 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
       <div className='min-h-[900px] bg-[#EEEEEE]'>
         <CanvasRestriction className="grid lg:grid-cols-3  gap-14 py-12 items-start">
           <div className='flex flex-col space-y-6 col-span-2 lg:col-span-1 lg:sticky lg:top-[100px]'>
+            
             <div className='bg-white w-full rounded-lg shadow-lg p-4 flex flex-col'>
               <span className="text-xl font-bold mb-2">Your booking details</span>
               <div className='grid grid-cols-2 items-start  sticky top-0 h-full gap-y-3'>
@@ -127,6 +130,15 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
             
           </div>
           <form onSubmit={handleSubmit} className='col-span-2 flex flex-col space-y-6 items-end'>
+            {serverError ? (
+            <Alert variant="destructive">
+              <AlertTitle>Something went wrong</AlertTitle>
+              <AlertDescription>
+                {serverError}
+              </AlertDescription>
+            </Alert>
+            ) : null}
+
 
             
             <div className='bg-white w-full rounded-lg shadow-lg p-4'>
@@ -309,7 +321,7 @@ const ServicesPage = ({webInfo, geoLocation, auth}: any) => {
                 </div>
               </div>
             </div>
-            <button type='submit' className='bg-[#4A86FF] text-white p-2 rounded-sm' disabled={!isValid || isDisabledButton}>RESERVE NOW</button>
+            <Button type='submit' className='p-2 rounded-sm' disabled={!isValid || isDisabledButton}>RESERVE NOW</Button>
           </form>
 
         </CanvasRestriction>
