@@ -81,7 +81,6 @@ Route::middleware(['auth', 'verified', 'detect-owner','admin-clearance'])->group
 
 });
 
-// Route for customers
 Route::middleware(['auth', 'verified', 'detect-owner'])->group(function (){
     Route::get('/dashboard', function() {
         $array = [
@@ -93,7 +92,10 @@ Route::middleware(['auth', 'verified', 'detect-owner'])->group(function (){
         }  
         return redirect('/');
     })->name('dashboard');
-//
+});
+
+// Route for customers
+Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/user/reservation', [ActiveReservationController::class, 'index'])->name('customer.reservation');
     Route::get('/account', [CustomerAccountEditController::class, 'index'])->name('customer.account');
     Route::get('/awaiting-confirmation', [PaymongoIntentController::class, 'viewIntent'])->name('services.awaiting-confirmation');   
@@ -102,7 +104,6 @@ Route::middleware(['auth', 'verified', 'detect-owner'])->group(function (){
     Route::get('/review', [ReviewController::class, 'viewReviewPage'])->name('customer.review-page');
     Route::post('/review', [ReviewController::class, 'makeCustomerReview'])->name('customer.review-make');
 });
-
 
 Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');

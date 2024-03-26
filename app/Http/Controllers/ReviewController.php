@@ -12,7 +12,7 @@ class ReviewController extends Controller
 {
     //
     public function viewReviewPage(Request $request){
-        $getTransaction = DB::table('transactions')->where('user_id', auth()->user()->id)->where('status', TransactionStatus::COMPLETE->value)->whereNot('is_reviewed', false)->first();
+        $getTransaction = DB::table('reviews')->where('user_id', auth()->user()->id)->first();
         $payload = [
             'responseError' => session('error')
         ];
