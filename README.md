@@ -3,7 +3,7 @@
 <p align="center">
 A realtime laundry system made by Laravel and React with Inertia.js   
 </p>
-✅ Admin dashboard<br/>
+✅ Admin setup & admin dashboard<br/>
 ✅ Realtime transaction tracker for users<br/>
 ✅ Fully functional e-wallet and credit card payment using Paymongo gateway<br/>
 ✅ Mapbox integration to view available the laundry shop<br/>
